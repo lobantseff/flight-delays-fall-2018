@@ -1,5 +1,5 @@
 raw_competition_data/
-!raw_competition_data/get_data.txt
+!/raw_competition_data/get_data.txt
 .DS_Store
 .ipynb_checkpoints
 __pycache__
