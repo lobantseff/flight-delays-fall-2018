@@ -1,0 +1,3 @@
+### in current directory run in shell following command
+# pip install kaggle
+$ kaggle competitions downoad -c flight-delays-spring-2018
