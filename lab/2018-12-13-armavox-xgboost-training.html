@@ -11812,21 +11812,29 @@ div#notebook {
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Init-required--modules">Init required  modules<a class="anchor-link" href="#Init-required--modules">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Notebook environment</strong></p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">statsmodels.stats.weightstats</span> <span class="k">as</span> <span class="nn">wsts</span>
-<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
-
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;patch.force_edgecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-
-<span class="c1"># pip install watermark</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># pip install watermark</span>
 <span class="o">%</span><span class="k">load_ext</span> watermark
 <span class="o">%</span><span class="k">watermark</span> -v -m -r -b -g -p numpy,pandas,sklearn,matplotlib,statsmodels,xgboost,catboost
 </pre></div>
@@ -11845,7 +11853,9 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPython 3.7.1
+<pre>The watermark extension is already loaded. To reload it, use:
+  %reload_ext watermark
+CPython 3.7.1
 IPython 7.2.0
 
 numpy 1.15.4
@@ -11863,8 +11873,8 @@ machine    : x86_64
 processor  : i386
 CPU cores  : 8
 interpreter: 64bit
-Git hash   : 10f8b993ac90c4de1583165027d9b5120fc1796e
-Git repo   : 
+Git hash   : 2c95db525d0633c49aa9b273528585fd06366b96
+Git repo   : https://github.com/armavox/flight-delays-spring-2018.git
 Git branch : master
 </pre>
 </div>
@@ -11874,11 +11884,43 @@ Git branch : master
 </div>
 
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[96]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">statsmodels.stats.weightstats</span> <span class="k">as</span> <span class="nn">wsts</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">hstack</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">,</span> <span class="n">issparse</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;patch.force_edgecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">OneHotEncoder</span><span class="p">,</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="p">(</span><span class="n">train_test_split</span><span class="p">,</span> <span class="n">StratifiedKFold</span><span class="p">,</span> 
+                                     <span class="n">cross_val_score</span><span class="p">,</span> <span class="n">GridSearchCV</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">roc_auc_score</span>
+
+<span class="kn">from</span> <span class="nn">xgboost</span> <span class="k">import</span> <span class="n">XGBClassifier</span>
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Training">Training<a class="anchor-link" href="#Training">&#182;</a></h2>
+<h2 id="Data-preparation">Data preparation<a class="anchor-link" href="#Data-preparation">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -11892,16 +11934,2871 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/train.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;idx&#39;</span><span class="p">)</span>
+<span class="n">train</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 
 </div>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[14]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Month</th>
+      <th>DayofMonth</th>
+      <th>DayOfWeek</th>
+      <th>UniqueCarrier</th>
+      <th>Origin</th>
+      <th>Dest</th>
+      <th>Distance</th>
+      <th>Hour</th>
+      <th>Minute</th>
+      <th>IsWeekend</th>
+    </tr>
+    <tr>
+      <th>idx</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>8</td>
+      <td>21</td>
+      <td>7</td>
+      <td>AA</td>
+      <td>ATL</td>
+      <td>DFW</td>
+      <td>732.0</td>
+      <td>19</td>
+      <td>34</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>20</td>
+      <td>3</td>
+      <td>US</td>
+      <td>PIT</td>
+      <td>MCO</td>
+      <td>834.0</td>
+      <td>15</td>
+      <td>48</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9</td>
+      <td>2</td>
+      <td>5</td>
+      <td>XE</td>
+      <td>RDU</td>
+      <td>CLE</td>
+      <td>416.0</td>
+      <td>14</td>
+      <td>22</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/test.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;idx&#39;</span><span class="p">)</span>
+<span class="n">test</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[15]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Month</th>
+      <th>DayofMonth</th>
+      <th>DayOfWeek</th>
+      <th>UniqueCarrier</th>
+      <th>Origin</th>
+      <th>Dest</th>
+      <th>Distance</th>
+      <th>Hour</th>
+      <th>Minute</th>
+      <th>IsWeekend</th>
+    </tr>
+    <tr>
+      <th>idx</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>7</td>
+      <td>25</td>
+      <td>3</td>
+      <td>YV</td>
+      <td>MRY</td>
+      <td>PHX</td>
+      <td>598.0</td>
+      <td>6</td>
+      <td>15</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>17</td>
+      <td>2</td>
+      <td>WN</td>
+      <td>LAS</td>
+      <td>HOU</td>
+      <td>1235.0</td>
+      <td>7</td>
+      <td>39</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>12</td>
+      <td>2</td>
+      <td>7</td>
+      <td>MQ</td>
+      <td>GSP</td>
+      <td>ORD</td>
+      <td>577.0</td>
+      <td>6</td>
+      <td>51</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/target.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;idx&#39;</span><span class="p">)</span>
+<span class="n">target</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[17]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>dep_delayed_15min</th>
+    </tr>
+    <tr>
+      <th>idx</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Origin_Dest interaction: <code>Route</code> feature</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;Route&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s1">&#39;Origin&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">train</span><span class="p">[</span><span class="s1">&#39;Dest&#39;</span><span class="p">]</span>
+<span class="n">test</span><span class="p">[</span><span class="s1">&#39;Route&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="s1">&#39;Origin&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">test</span><span class="p">[</span><span class="s1">&#39;Dest&#39;</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="FEATURES-CONVERSION">FEATURES CONVERSION<a class="anchor-link" href="#FEATURES-CONVERSION">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[68]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[68]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Month</th>
+      <th>DayofMonth</th>
+      <th>DayOfWeek</th>
+      <th>UniqueCarrier</th>
+      <th>Origin</th>
+      <th>Dest</th>
+      <th>Distance</th>
+      <th>Hour</th>
+      <th>Minute</th>
+      <th>IsWeekend</th>
+      <th>Route</th>
+    </tr>
+    <tr>
+      <th>idx</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>8</td>
+      <td>21</td>
+      <td>7</td>
+      <td>AA</td>
+      <td>ATL</td>
+      <td>DFW</td>
+      <td>732.0</td>
+      <td>19</td>
+      <td>34</td>
+      <td>1</td>
+      <td>ATL_DFW</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[44]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ohe</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">handle_unknown</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_month_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">Month</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">X_month_test</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">Month</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_dom_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">DayofMonth</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">X_dom_test</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">DayofMonth</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[47]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_dow_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">DayOfWeek</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">X_dow_test</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">DayOfWeek</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[62]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_hour_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">Hour</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">X_hour_test</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">Hour</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[63]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_minute_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">Minute</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">X_minute_test</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">Minute</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[64]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_isweekend_train</span> <span class="o">=</span> <span class="n">train</span><span class="o">.</span><span class="n">IsWeekend</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">X_isweekend_test</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">IsWeekend</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_carrier_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">UniqueCarrier</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">X_carrier_test</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">UniqueCarrier</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_origin_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">Origin</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">X_origin_test</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">Origin</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_dest_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">Dest</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">X_dest_test</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">Dest</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_route_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">Route</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">X_route_test</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">Route</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="SELECT-FEATURES">SELECT FEATURES<a class="anchor-link" href="#SELECT-FEATURES">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[106]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">simple_xgb_cv</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+                   <span class="n">train_size</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get ROC-AUC score for simple XGBoost classifier</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">skf</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+    
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="n">train_size</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="n">xgb</span> <span class="o">=</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="n">n_estimators</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span>
+                        <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    
+    <span class="n">roc_auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">xgb</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_valid</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">],</span>
+                            <span class="n">average</span><span class="o">=</span><span class="s1">&#39;samples&#39;</span><span class="p">)</span>
+    
+    <span class="n">cv_score</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">xgb</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">,</span> 
+                               <span class="n">cv</span><span class="o">=</span><span class="n">skf</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">roc_auc</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">cv_score</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">features</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;X_month_train&#39;</span><span class="p">:</span> <span class="n">X_month_train</span><span class="p">,</span> 
+            <span class="s1">&#39;X_dom_train&#39;</span><span class="p">:</span> <span class="n">X_dom_train</span><span class="p">,</span> 
+            <span class="s1">&#39;X_dow_train&#39;</span><span class="p">:</span> <span class="n">X_dow_train</span><span class="p">,</span> 
+            <span class="s1">&#39;X_hour_train&#39;</span><span class="p">:</span> <span class="n">X_hour_train</span><span class="p">,</span> 
+            <span class="s1">&#39;X_minute_train&#39;</span><span class="p">:</span> <span class="n">X_minute_train</span><span class="p">,</span>
+            <span class="s1">&#39;X_isweekend_train&#39;</span><span class="p">:</span> <span class="n">X_isweekend_train</span><span class="p">,</span>
+            <span class="s1">&#39;X_carrier_train&#39;</span><span class="p">:</span> <span class="n">X_carrier_train</span><span class="p">,</span>
+            <span class="s1">&#39;X_origin_train&#39;</span><span class="p">:</span> <span class="n">X_origin_train</span><span class="p">,</span>
+            <span class="s1">&#39;X_dest_train&#39;</span><span class="p">:</span> <span class="n">X_dest_train</span><span class="p">,</span>
+            <span class="s1">&#39;X_route_train&#39;</span><span class="p">:</span> <span class="n">X_route_train</span><span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">select_best_feature_comb</span><span class="p">(</span><span class="n">features_dict</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">hstack</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">,</span> <span class="n">isspmatrix_csr</span>
+    
+    <span class="n">results_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="n">list_of_keys</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">comb</span><span class="p">)</span> <span class="k">for</span> <span class="n">comb</span> <span class="ow">in</span> 
+                        <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">l</span><span class="p">)]</span>
+        <span class="n">list_of_combs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">comb</span><span class="p">)</span> <span class="k">for</span> <span class="n">comb</span> <span class="ow">in</span> 
+                         <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">l</span><span class="p">)]</span>
+
+        <span class="k">for</span> <span class="n">keys</span><span class="p">,</span> <span class="n">comb</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">list_of_keys</span><span class="p">,</span> <span class="n">list_of_combs</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train on:&#39;</span><span class="p">,</span> <span class="n">keys</span><span class="p">)</span>
+            
+            <span class="n">is_csr</span> <span class="o">=</span> <span class="p">[</span><span class="n">isspmatrix_csr</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">comb</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">is_csr</span><span class="p">):</span>
+                <span class="n">X_con</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">(</span><span class="n">comb</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">comb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">comb</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">X_con</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">(</span><span class="n">comb</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
+                
+            <span class="n">result</span> <span class="o">=</span> <span class="n">simple_xgb_cv</span><span class="p">(</span><span class="n">X_con</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="n">results_dict</span><span class="p">[</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keys</span><span class="p">)]</span> <span class="o">=</span> <span class="n">result</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;CV: </span><span class="si">{result[1]}</span><span class="s1">, OOF: </span><span class="si">{result[0]}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            
+    <span class="k">return</span> <span class="n">results_dict</span>
+
+<span class="n">select_best_feature_comb</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Train on: [&#39;X_month_train&#39;]
+CV: 0.55243, OOF: 0.5521 
+
+Train on: [&#39;X_dom_train&#39;]
+CV: 0.52353, OOF: 0.52167 
+
+Train on: [&#39;X_dow_train&#39;]
+CV: 0.53438, OOF: 0.53991 
+
+Train on: [&#39;X_hour_train&#39;]
+CV: 0.68467, OOF: 0.68235 
+
+Train on: [&#39;X_minute_train&#39;]
+CV: 0.52264, OOF: 0.52692 
+
+Train on: [&#39;X_isweekend_train&#39;]
+CV: 0.50765, OOF: 0.51224 
+
+Train on: [&#39;X_carrier_train&#39;]
+CV: 0.54553, OOF: 0.54288 
+
+Train on: [&#39;X_origin_train&#39;]
+CV: 0.54804, OOF: 0.55324 
+
+Train on: [&#39;X_dest_train&#39;]
+CV: 0.54306, OOF: 0.54792 
+
+Train on: [&#39;X_route_train&#39;]
+CV: 0.5097, OOF: 0.50741 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;]
+CV: 0.57066, OOF: 0.5735 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;]
+CV: 0.56612, OOF: 0.57273 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;]
+CV: 0.68989, OOF: 0.68917 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;]
+CV: 0.5537, OOF: 0.55604 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.55462, OOF: 0.55599 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.5734, OOF: 0.56957 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.5714, OOF: 0.57262 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56898, OOF: 0.57086 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_route_train&#39;]
+CV: 0.557, OOF: 0.55383 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;]
+CV: 0.55428, OOF: 0.55619 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;]
+CV: 0.68404, OOF: 0.68163 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;]
+CV: 0.52722, OOF: 0.53132 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.53133, OOF: 0.52852 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.54686, OOF: 0.54446 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.55285, OOF: 0.55518 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.54711, OOF: 0.54777 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_route_train&#39;]
+CV: 0.52391, OOF: 0.521 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;]
+CV: 0.68531, OOF: 0.68329 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;]
+CV: 0.53871, OOF: 0.54454 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.53438, OOF: 0.53991 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.55934, OOF: 0.55914 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.56121, OOF: 0.56724 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.55788, OOF: 0.56256 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_route_train&#39;]
+CV: 0.53905, OOF: 0.54336 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;]
+CV: 0.68457, OOF: 0.68176 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.68497, OOF: 0.68266 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.68832, OOF: 0.68585 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68687, OOF: 0.68471 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68608, OOF: 0.68441 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68445, OOF: 0.6827 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.52529, OOF: 0.52739 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.5529, OOF: 0.55212 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.54968, OOF: 0.55791 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.54573, OOF: 0.54748 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.51932, OOF: 0.52072 
+
+Train on: [&#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.54733, OOF: 0.54846 
+
+Train on: [&#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.54887, OOF: 0.55657 
+
+Train on: [&#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.54363, OOF: 0.55093 
+
+Train on: [&#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.51638, OOF: 0.5196 
+
+Train on: [&#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.56719, OOF: 0.57169 
+
+Train on: [&#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56227, OOF: 0.5632 
+
+Train on: [&#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54229, OOF: 0.54437 
+
+Train on: [&#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56388, OOF: 0.56945 
+
+Train on: [&#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54495, OOF: 0.55205 
+
+Train on: [&#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54455, OOF: 0.54394 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;]
+CV: 0.58188, OOF: 0.58818 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;]
+CV: 0.69067, OOF: 0.68993 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;]
+CV: 0.56797, OOF: 0.57449 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.5711, OOF: 0.57364 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.57834, OOF: 0.57736 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57878, OOF: 0.58132 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5774, OOF: 0.58036 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56709, OOF: 0.56656 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;]
+CV: 0.69025, OOF: 0.68962 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;]
+CV: 0.56719, OOF: 0.57178 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.56603, OOF: 0.57326 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.58551, OOF: 0.58583 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.58255, OOF: 0.58596 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5794, OOF: 0.58491 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56881, OOF: 0.57261 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;]
+CV: 0.68999, OOF: 0.68874 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.68912, OOF: 0.68933 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.69269, OOF: 0.69284 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69242, OOF: 0.69039 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69109, OOF: 0.68892 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69026, OOF: 0.68945 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.5552, OOF: 0.55782 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.57555, OOF: 0.57287 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57138, OOF: 0.57222 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57005, OOF: 0.5739 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.5573, OOF: 0.55609 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.57412, OOF: 0.57204 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57168, OOF: 0.574 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57, OOF: 0.57122 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55767, OOF: 0.5551 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.58392, OOF: 0.58687 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58201, OOF: 0.58019 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57294, OOF: 0.56729 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58149, OOF: 0.58307 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.5689, OOF: 0.57042 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56983, OOF: 0.57066 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;]
+CV: 0.68554, OOF: 0.68303 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;]
+CV: 0.55122, OOF: 0.55678 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.55472, OOF: 0.55636 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.56605, OOF: 0.56704 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.56644, OOF: 0.57084 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56313, OOF: 0.57176 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55127, OOF: 0.55811 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;]
+CV: 0.68453, OOF: 0.68192 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.6841, OOF: 0.68175 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.68842, OOF: 0.68586 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68685, OOF: 0.68473 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68604, OOF: 0.68456 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68427, OOF: 0.68263 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.53193, OOF: 0.53579 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.55224, OOF: 0.55165 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.55583, OOF: 0.55908 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.54802, OOF: 0.55253 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.52819, OOF: 0.53182 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.54898, OOF: 0.55237 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.55625, OOF: 0.55808 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.55016, OOF: 0.55029 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.5305, OOF: 0.53136 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.56726, OOF: 0.57053 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56337, OOF: 0.56045 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54544, OOF: 0.54807 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56709, OOF: 0.57149 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55164, OOF: 0.55086 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54838, OOF: 0.54804 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;]
+CV: 0.68595, OOF: 0.68542 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.68529, OOF: 0.68311 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.68958, OOF: 0.68883 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68853, OOF: 0.68774 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.6886, OOF: 0.68739 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68556, OOF: 0.68324 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.53864, OOF: 0.54455 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.56297, OOF: 0.56132 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.56037, OOF: 0.56722 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.55813, OOF: 0.56361 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54059, OOF: 0.54491 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.55908, OOF: 0.55946 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.56102, OOF: 0.56562 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.55735, OOF: 0.56253 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.53917, OOF: 0.54357 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57373, OOF: 0.58 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57369, OOF: 0.57086 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56072, OOF: 0.55914 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57411, OOF: 0.58059 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56005, OOF: 0.56556 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.5595, OOF: 0.5632 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.68434, OOF: 0.68186 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.68825, OOF: 0.68616 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68689, OOF: 0.68488 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68603, OOF: 0.68481 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.6847, OOF: 0.6821 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.68835, OOF: 0.68591 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68693, OOF: 0.68476 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68597, OOF: 0.68452 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68441, OOF: 0.68292 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68957, OOF: 0.68835 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68908, OOF: 0.68748 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68786, OOF: 0.68595 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68747, OOF: 0.68507 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68694, OOF: 0.68449 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68586, OOF: 0.68462 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.55343, OOF: 0.55458 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.5527, OOF: 0.56082 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.54702, OOF: 0.55181 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.5241, OOF: 0.52797 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.56988, OOF: 0.574 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56405, OOF: 0.56329 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55002, OOF: 0.55002 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56457, OOF: 0.57106 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54728, OOF: 0.55755 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54522, OOF: 0.5496 
+
+Train on: [&#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.56834, OOF: 0.57787 
+
+Train on: [&#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5643, OOF: 0.56123 
+
+Train on: [&#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54754, OOF: 0.5486 
+
+Train on: [&#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5654, OOF: 0.57003 
+
+Train on: [&#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54717, OOF: 0.55822 
+
+Train on: [&#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54566, OOF: 0.54965 
+
+Train on: [&#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57907, OOF: 0.5827 
+
+Train on: [&#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.5663, OOF: 0.57053 
+
+Train on: [&#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56305, OOF: 0.55882 
+
+Train on: [&#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56411, OOF: 0.56817 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;]
+CV: 0.69036, OOF: 0.69037 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;]
+CV: 0.57955, OOF: 0.58526 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.58133, OOF: 0.58697 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.58928, OOF: 0.5926 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.58883, OOF: 0.59458 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58676, OOF: 0.59455 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57955, OOF: 0.58573 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;]
+CV: 0.69062, OOF: 0.68742 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.69058, OOF: 0.68962 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.6927, OOF: 0.69235 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69269, OOF: 0.69107 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.6916, OOF: 0.692 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68883, OOF: 0.68996 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.5678, OOF: 0.57475 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.58154, OOF: 0.57901 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57892, OOF: 0.58181 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5769, OOF: 0.58115 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56683, OOF: 0.56899 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.57824, OOF: 0.57834 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57902, OOF: 0.58144 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57678, OOF: 0.58175 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.567, OOF: 0.56867 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.588, OOF: 0.59089 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58601, OOF: 0.58416 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57693, OOF: 0.57264 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58677, OOF: 0.59226 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57795, OOF: 0.57903 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57585, OOF: 0.58211 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;]
+CV: 0.6908, OOF: 0.68962 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.69025, OOF: 0.68965 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.69358, OOF: 0.69244 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69375, OOF: 0.69126 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69135, OOF: 0.69077 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69017, OOF: 0.68806 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.56723, OOF: 0.57262 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.58648, OOF: 0.58675 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.58156, OOF: 0.58671 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57935, OOF: 0.58347 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56918, OOF: 0.573 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.5846, OOF: 0.58495 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.58238, OOF: 0.5859 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57901, OOF: 0.58528 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56937, OOF: 0.57341 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.59429, OOF: 0.59925 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.59325, OOF: 0.59224 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58455, OOF: 0.5835 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5907, OOF: 0.59573 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58072, OOF: 0.58635 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58087, OOF: 0.58478 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.69, OOF: 0.68876 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.69298, OOF: 0.69278 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69279, OOF: 0.69032 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69137, OOF: 0.69123 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68915, OOF: 0.68926 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.69268, OOF: 0.69269 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69243, OOF: 0.69036 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69105, OOF: 0.6889 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69006, OOF: 0.68946 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69409, OOF: 0.6946 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69479, OOF: 0.69375 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69381, OOF: 0.69269 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69309, OOF: 0.69138 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69335, OOF: 0.69074 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69076, OOF: 0.69109 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.57701, OOF: 0.57574 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57194, OOF: 0.57545 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57097, OOF: 0.57336 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55784, OOF: 0.55755 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.58553, OOF: 0.58743 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58349, OOF: 0.57988 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57549, OOF: 0.57088 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58125, OOF: 0.58585 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57083, OOF: 0.57076 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57041, OOF: 0.5722 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.58375, OOF: 0.58696 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58252, OOF: 0.58045 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57332, OOF: 0.56851 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5812, OOF: 0.58467 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56949, OOF: 0.5707 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57079, OOF: 0.57194 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.59084, OOF: 0.59374 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58278, OOF: 0.58489 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58215, OOF: 0.57784 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58127, OOF: 0.58266 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;]
+CV: 0.68594, OOF: 0.68299 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.68558, OOF: 0.68319 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.69044, OOF: 0.68915 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68867, OOF: 0.68782 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68953, OOF: 0.68733 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68592, OOF: 0.6833 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.55023, OOF: 0.55773 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.56725, OOF: 0.57036 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.56658, OOF: 0.57218 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56252, OOF: 0.57023 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55069, OOF: 0.55729 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.56592, OOF: 0.5663 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.56766, OOF: 0.57229 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56267, OOF: 0.57191 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55029, OOF: 0.55947 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57667, OOF: 0.58286 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5765, OOF: 0.57552 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56479, OOF: 0.56651 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57713, OOF: 0.58531 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56555, OOF: 0.57121 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56427, OOF: 0.57197 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.68416, OOF: 0.68218 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.68819, OOF: 0.68599 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68688, OOF: 0.68481 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68636, OOF: 0.68483 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68463, OOF: 0.68245 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.68836, OOF: 0.68606 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68696, OOF: 0.68476 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68598, OOF: 0.68457 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68425, OOF: 0.68271 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68897, OOF: 0.68839 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68916, OOF: 0.68758 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68796, OOF: 0.68553 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68747, OOF: 0.6851 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68697, OOF: 0.68462 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68578, OOF: 0.6846 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.55401, OOF: 0.55634 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.55842, OOF: 0.56434 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.55047, OOF: 0.55668 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.53418, OOF: 0.53681 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57029, OOF: 0.57485 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56611, OOF: 0.56493 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55096, OOF: 0.55274 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56711, OOF: 0.57265 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55236, OOF: 0.55629 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55065, OOF: 0.55364 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.5683, OOF: 0.575 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56487, OOF: 0.56042 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54831, OOF: 0.55306 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56729, OOF: 0.57251 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55569, OOF: 0.55842 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54991, OOF: 0.55505 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57989, OOF: 0.5831 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56724, OOF: 0.57178 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56417, OOF: 0.56134 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56639, OOF: 0.57196 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.68594, OOF: 0.68271 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.68937, OOF: 0.68899 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68858, OOF: 0.68787 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68822, OOF: 0.68748 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68672, OOF: 0.68314 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.68962, OOF: 0.68882 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68849, OOF: 0.68788 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68857, OOF: 0.6874 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68553, OOF: 0.68324 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69181, OOF: 0.6913 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.6917, OOF: 0.69079 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68885, OOF: 0.68905 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69096, OOF: 0.68546 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68941, OOF: 0.68772 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68833, OOF: 0.68716 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.56326, OOF: 0.56211 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.5609, OOF: 0.56692 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.55798, OOF: 0.56369 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54083, OOF: 0.54665 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57477, OOF: 0.58131 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57506, OOF: 0.57087 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56361, OOF: 0.56247 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57363, OOF: 0.58062 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.5608, OOF: 0.56633 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55999, OOF: 0.5648 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57428, OOF: 0.57814 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5735, OOF: 0.57024 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56141, OOF: 0.55981 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57471, OOF: 0.58055 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55992, OOF: 0.5656 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.5595, OOF: 0.56325 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58491, OOF: 0.58941 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57266, OOF: 0.57813 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57376, OOF: 0.57365 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57442, OOF: 0.58031 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.68819, OOF: 0.68618 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68684, OOF: 0.68481 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68597, OOF: 0.6848 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68442, OOF: 0.68239 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69015, OOF: 0.68836 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68905, OOF: 0.68782 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68777, OOF: 0.68615 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68753, OOF: 0.68517 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68696, OOF: 0.68445 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68588, OOF: 0.68474 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68961, OOF: 0.68846 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68908, OOF: 0.68751 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68774, OOF: 0.68614 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68744, OOF: 0.68524 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68686, OOF: 0.68448 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68583, OOF: 0.68447 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69199, OOF: 0.68865 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68886, OOF: 0.68861 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68856, OOF: 0.68744 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68742, OOF: 0.68507 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57047, OOF: 0.57702 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56437, OOF: 0.565 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55165, OOF: 0.55175 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56645, OOF: 0.57105 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54867, OOF: 0.55855 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.54783, OOF: 0.5537 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58062, OOF: 0.58321 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56897, OOF: 0.57245 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.5652, OOF: 0.56541 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56522, OOF: 0.57117 
+
+Train on: [&#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5799, OOF: 0.58287 
+
+Train on: [&#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56718, OOF: 0.56995 
+
+Train on: [&#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56322, OOF: 0.56425 
+
+Train on: [&#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56372, OOF: 0.56881 
+
+Train on: [&#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57915, OOF: 0.58323 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;]
+CV: 0.6911, OOF: 0.68807 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.69051, OOF: 0.69044 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.69446, OOF: 0.69508 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69305, OOF: 0.69345 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69248, OOF: 0.69133 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69064, OOF: 0.69071 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.57999, OOF: 0.58509 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.59119, OOF: 0.59439 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.58874, OOF: 0.59553 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58801, OOF: 0.59252 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57899, OOF: 0.58351 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.59024, OOF: 0.59258 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.58849, OOF: 0.59471 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58676, OOF: 0.59506 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57991, OOF: 0.58564 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.59673, OOF: 0.60268 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5966, OOF: 0.59961 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58976, OOF: 0.5917 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.59399, OOF: 0.60346 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.5879, OOF: 0.59473 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58752, OOF: 0.59528 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.69039, OOF: 0.68748 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.69357, OOF: 0.69222 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69261, OOF: 0.69116 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69175, OOF: 0.69195 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69012, OOF: 0.69016 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.6925, OOF: 0.69237 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69277, OOF: 0.69085 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69107, OOF: 0.69199 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68988, OOF: 0.68997 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69439, OOF: 0.69422 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.6955, OOF: 0.69451 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69422, OOF: 0.69247 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.6933, OOF: 0.6921 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69293, OOF: 0.69178 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69214, OOF: 0.69205 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.58088, OOF: 0.58152 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57857, OOF: 0.58149 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57671, OOF: 0.5824 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56617, OOF: 0.5706 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.58956, OOF: 0.59259 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58841, OOF: 0.58858 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58046, OOF: 0.57825 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58751, OOF: 0.59094 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57815, OOF: 0.57906 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57719, OOF: 0.58229 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.58695, OOF: 0.59183 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58558, OOF: 0.58389 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.5771, OOF: 0.57365 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58749, OOF: 0.59162 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57677, OOF: 0.57969 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57719, OOF: 0.58121 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.59528, OOF: 0.59814 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58747, OOF: 0.58905 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58679, OOF: 0.58417 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58704, OOF: 0.59297 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.69076, OOF: 0.68978 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.69383, OOF: 0.69259 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69416, OOF: 0.69128 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69197, OOF: 0.69069 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.6902, OOF: 0.69014 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.69342, OOF: 0.69244 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69333, OOF: 0.69124 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69132, OOF: 0.69074 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69016, OOF: 0.68808 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69498, OOF: 0.69392 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69606, OOF: 0.69403 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.6942, OOF: 0.69234 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69374, OOF: 0.69156 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69308, OOF: 0.69091 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69283, OOF: 0.69054 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.58588, OOF: 0.58691 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.58163, OOF: 0.58673 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5794, OOF: 0.58377 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56897, OOF: 0.57292 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.59456, OOF: 0.59996 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.59224, OOF: 0.59441 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58622, OOF: 0.5857 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.59096, OOF: 0.59536 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58138, OOF: 0.58721 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57943, OOF: 0.58426 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.59371, OOF: 0.59911 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.59273, OOF: 0.59226 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58427, OOF: 0.58412 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5906, OOF: 0.59581 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58023, OOF: 0.58584 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58053, OOF: 0.58471 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5993, OOF: 0.60318 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.59275, OOF: 0.59885 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.59244, OOF: 0.59204 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dow_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.59077, OOF: 0.59602 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.69339, OOF: 0.69268 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69277, OOF: 0.69026 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69057, OOF: 0.69128 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68907, OOF: 0.68913 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69416, OOF: 0.69454 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69454, OOF: 0.69394 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69338, OOF: 0.69231 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69251, OOF: 0.69156 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69227, OOF: 0.69083 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.6911, OOF: 0.69097 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69416, OOF: 0.69448 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69514, OOF: 0.69386 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69384, OOF: 0.69256 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69306, OOF: 0.6914 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69336, OOF: 0.69071 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.6907, OOF: 0.6911 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69493, OOF: 0.69466 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69378, OOF: 0.69452 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69387, OOF: 0.69328 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69223, OOF: 0.69122 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.5848, OOF: 0.58862 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58323, OOF: 0.58209 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.5763, OOF: 0.5743 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5818, OOF: 0.5854 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57136, OOF: 0.57288 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57063, OOF: 0.57271 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.59215, OOF: 0.59501 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58507, OOF: 0.58691 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58388, OOF: 0.58018 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.5814, OOF: 0.58471 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.59127, OOF: 0.5954 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58276, OOF: 0.58455 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58207, OOF: 0.58018 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58186, OOF: 0.58378 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.59082, OOF: 0.59348 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.68586, OOF: 0.68592 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.68938, OOF: 0.68911 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68855, OOF: 0.68788 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68943, OOF: 0.68754 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68611, OOF: 0.68313 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.69045, OOF: 0.689 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68864, OOF: 0.68797 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68949, OOF: 0.68735 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68591, OOF: 0.68331 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69173, OOF: 0.69087 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69195, OOF: 0.69049 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68979, OOF: 0.68912 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69108, OOF: 0.68547 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68964, OOF: 0.68792 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68848, OOF: 0.68719 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.56644, OOF: 0.57034 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.56612, OOF: 0.57275 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56226, OOF: 0.57083 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55085, OOF: 0.55875 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57866, OOF: 0.58621 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57695, OOF: 0.57895 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56748, OOF: 0.56916 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57644, OOF: 0.58614 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56602, OOF: 0.57351 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56437, OOF: 0.57297 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57698, OOF: 0.58198 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57889, OOF: 0.57558 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56476, OOF: 0.56664 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57751, OOF: 0.58554 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56526, OOF: 0.57026 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56617, OOF: 0.57357 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58573, OOF: 0.59213 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57655, OOF: 0.5828 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57687, OOF: 0.57605 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57742, OOF: 0.58658 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.68812, OOF: 0.68578 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68682, OOF: 0.68479 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68627, OOF: 0.68483 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68425, OOF: 0.68267 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.6893, OOF: 0.68912 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68901, OOF: 0.68827 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68809, OOF: 0.68604 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68755, OOF: 0.68521 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68702, OOF: 0.68458 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68619, OOF: 0.68451 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68893, OOF: 0.6881 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68912, OOF: 0.68759 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68795, OOF: 0.68572 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.6875, OOF: 0.68525 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.6869, OOF: 0.68482 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68578, OOF: 0.68464 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69195, OOF: 0.68817 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68896, OOF: 0.6878 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.6885, OOF: 0.68742 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68748, OOF: 0.68508 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57186, OOF: 0.57746 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.56691, OOF: 0.56733 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55431, OOF: 0.55456 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.5677, OOF: 0.57398 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55518, OOF: 0.55993 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55226, OOF: 0.5588 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58125, OOF: 0.58328 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56885, OOF: 0.57239 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56609, OOF: 0.56453 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56676, OOF: 0.57257 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58257, OOF: 0.58328 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56808, OOF: 0.57018 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56527, OOF: 0.56248 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56617, OOF: 0.57319 
+
+Train on: [&#39;X_dom_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57934, OOF: 0.58492 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.68934, OOF: 0.68897 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.6884, OOF: 0.68804 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68818, OOF: 0.68747 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68595, OOF: 0.68312 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.6918, OOF: 0.69118 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69207, OOF: 0.6909 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68912, OOF: 0.68877 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.6907, OOF: 0.68803 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68913, OOF: 0.68751 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68906, OOF: 0.68744 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.6918, OOF: 0.69137 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69194, OOF: 0.69079 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68879, OOF: 0.68905 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69097, OOF: 0.68533 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68942, OOF: 0.68778 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68831, OOF: 0.68719 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69425, OOF: 0.69158 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69251, OOF: 0.69114 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.6918, OOF: 0.69035 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69154, OOF: 0.68796 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.57475, OOF: 0.5812 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57434, OOF: 0.57064 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56435, OOF: 0.56271 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.57421, OOF: 0.58084 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55958, OOF: 0.56641 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.55978, OOF: 0.56579 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58633, OOF: 0.59236 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57519, OOF: 0.57992 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57596, OOF: 0.57342 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57368, OOF: 0.58108 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58551, OOF: 0.58947 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57257, OOF: 0.57812 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57396, OOF: 0.57092 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57438, OOF: 0.57981 
+
+Train on: [&#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58501, OOF: 0.58992 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.68985, OOF: 0.68842 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68912, OOF: 0.68782 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68789, OOF: 0.68595 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.68753, OOF: 0.68528 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68692, OOF: 0.68444 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68586, OOF: 0.68459 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69054, OOF: 0.68864 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69007, OOF: 0.68832 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68876, OOF: 0.68861 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.6875, OOF: 0.68516 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.6908, OOF: 0.68861 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68885, OOF: 0.68862 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68855, OOF: 0.68744 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.68737, OOF: 0.6853 
+
+Train on: [&#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69045, OOF: 0.68863 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58164, OOF: 0.58446 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56935, OOF: 0.57557 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56556, OOF: 0.56489 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.56506, OOF: 0.57113 
+
+Train on: [&#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58192, OOF: 0.58326 
+
+Train on: [&#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57858, OOF: 0.58429 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;]
+CV: 0.69048, OOF: 0.6881 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.69401, OOF: 0.69507 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69368, OOF: 0.69142 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69243, OOF: 0.69129 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69092, OOF: 0.69037 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.69418, OOF: 0.69508 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69297, OOF: 0.69118 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.692, OOF: 0.6913 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69062, OOF: 0.69071 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69583, OOF: 0.69456 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69598, OOF: 0.69196 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69422, OOF: 0.69252 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69377, OOF: 0.69237 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69335, OOF: 0.69194 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_hour_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69261, OOF: 0.69372 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.59177, OOF: 0.59442 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.58857, OOF: 0.59545 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.58801, OOF: 0.59261 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.57892, OOF: 0.58348 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.59761, OOF: 0.60482 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.59565, OOF: 0.59937 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.59025, OOF: 0.59246 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.59502, OOF: 0.60264 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58763, OOF: 0.59413 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58658, OOF: 0.59607 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.59741, OOF: 0.60199 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.59607, OOF: 0.5996 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.59073, OOF: 0.59219 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.59423, OOF: 0.6034 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58843, OOF: 0.59479 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.58714, OOF: 0.59656 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.60145, OOF: 0.60585 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.59709, OOF: 0.60175 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.59487, OOF: 0.59937 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_dow_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.59464, OOF: 0.60198 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;]
+CV: 0.69363, OOF: 0.69221 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69266, OOF: 0.69103 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.6916, OOF: 0.69132 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69006, OOF: 0.69016 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69448, OOF: 0.69408 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.6947, OOF: 0.69476 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69432, OOF: 0.69047 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69356, OOF: 0.69213 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69311, OOF: 0.69249 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_minute_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.6911, OOF: 0.69211 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.69444, OOF: 0.69427 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69545, OOF: 0.69451 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_route_train&#39;]
+CV: 0.6941, OOF: 0.69253 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69328, OOF: 0.69209 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69305, OOF: 0.69179 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69169, OOF: 0.69205 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;]
+CV: 0.69581, OOF: 0.69288 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69484, OOF: 0.69418 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69394, OOF: 0.69432 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_hour_train&#39;, &#39;X_origin_train&#39;, &#39;X_dest_train&#39;, &#39;X_route_train&#39;]
+CV: 0.69283, OOF: 0.6919 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_origin_train&#39;]
+CV: 0.58985, OOF: 0.59212 
+
+Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#39;, &#39;X_isweekend_train&#39;, &#39;X_carrier_train&#39;, &#39;X_dest_train&#39;]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="CONCATENATE-DATA">CONCATENATE DATA<a class="anchor-link" href="#CONCATENATE-DATA">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[60]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">dep_delayed_15min</span><span class="o">.</span><span class="n">values</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Classes in dataset:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">))</span> 
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Size:&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;positive objects:&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Classes in dataset: [0 1]
+Size: (99994,)
+positive objects: 19038
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_month_train</span><span class="s1">&#39;, &#39;</span><span class="n">X_dom_train</span><span class="s1">&#39;, &#39;</span><span class="n">X_dow_train</span><span class="s1">&#39;, &#39;</span><span class="n">X_hour_train</span><span class="s1">&#39;, &#39;</span><span class="n">X_carrier_train</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">([</span><span class="n">X_month_train</span><span class="p">,</span> <span class="n">X_dom_train</span><span class="p">,</span>
+            <span class="n">X_dow_train</span><span class="p">,</span> <span class="n">X_</span><span class="p">]</span> <span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
+
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">([</span><span class="n">X_tfidf_test</span><span class="p">,</span> <span class="n">X_hour_test</span><span class="p">,</span> 
+                 <span class="n">X_dow_test</span><span class="p">,</span> <span class="n">X_daytime_test</span><span class="p">,</span> 
+                 <span class="n">X_timespan_test</span><span class="p">,</span> <span class="n">X_unique_test</span><span class="p">,</span>
+                 <span class="n">X_intop10_test</span><span class="p">,</span> <span class="n">X_socnet_test</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
+
+<span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="XGBoost-TRAINING">XGBoost TRAINING<a class="anchor-link" href="#XGBoost-TRAINING">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Simple-XGBoost">Simple XGBoost<a class="anchor-link" href="#Simple-XGBoost">&#182;</a></h3>
+</div>
+</div>
 </div>
     </div>
   </div>
