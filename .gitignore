@@ -4,3 +4,4 @@ raw_competition_data/*
 .ipynb_checkpoints
 __pycache__
 .vscode
+/lab/catboost_info/*
