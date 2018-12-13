@@ -276,6 +276,12 @@ get_ipython().run_cell_magic('capture', 'In24', '%%time\nxgb.fit(X_train, y_trai
 get_ipython().run_cell_magic('capture', 'In25', "_cv_score = cross_val_score(xgb, X, y, scoring='roc_auc', cv=skf, n_jobs=-1)\n_cv_score.mean(), _cv_score.std()")
 
 
+# In[29]:
+
+
+In25.show()
+
+
 # ### XGB CV
 
 # In[ ]:
@@ -286,13 +292,13 @@ from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 
 # #### Iteration #1. Model complexity
 
-# In[ ]:
+# In[33]:
 
 
 _xgb_grid_params_iteration1 = {
     'colsample_bytree': np.linspace(0.4, 1, 5),
     'gamma': np.linspace(0.5, 1, 5),
-    'max_depth': np.arange(1, 11)
+    'max_depth': np.arange(1, 11),
     'min_child_weight': np.arange(1,11),
     'reg_alpha': np.logspace(-2, 2, 8),
     'reg_lambda': np.logspace(-2, 2, 8),
