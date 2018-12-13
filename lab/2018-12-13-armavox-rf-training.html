@@ -11859,20 +11859,20 @@ IPython 7.2.0
 numpy 1.15.4
 pandas 0.23.4
 sklearn 0.20.1
-matplotlib 2.2.2
+matplotlib 3.0.2
 statsmodels 0.9.0
 xgboost 0.81
 catboost 0.11.2
 
-compiler   : GCC 7.3.0
-system     : Linux
-release    : 4.14.77-70.59.amzn1.x86_64
+compiler   : Clang 4.0.1 (tags/RELEASE_401/final)
+system     : Darwin
+release    : 16.7.0
 machine    : x86_64
-processor  : x86_64
-CPU cores  : 72
+processor  : i386
+CPU cores  : 8
 interpreter: 64bit
-Git hash   : 2a0916569c3397dfd16e42762fdfc89e2ace2fb4
-Git repo   : https://github.com/armavox/flight-delays-spring-2018.git
+Git hash   : 0ffb443328315699e8f94d7f4131f1ea46f19d58
+Git repo   : https://github.com/armavox/flight-delays-fall-2018.git
 Git branch : master
 </pre>
 </div>
@@ -11884,7 +11884,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -12527,7 +12527,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[106]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">simple_xgb_cv</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
@@ -14714,7 +14714,7 @@ Train on: [&#39;X_month_train&#39;, &#39;X_dom_train&#39;, &#39;X_minute_train&#
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">dep_delayed_15min</span><span class="o">.</span><span class="n">values</span>
@@ -14750,7 +14750,7 @@ positive objects: 19038
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">([</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">X_month_train</span><span class="p">),</span> 
@@ -14788,7 +14788,7 @@ positive objects: 19038
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[23]:</div>
+<div class="prompt output_prompt">Out[21]:</div>
 
 
 
@@ -14821,13 +14821,11 @@ positive objects: 19038
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
         <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-
-<span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">oob_score</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -14841,6 +14839,7 @@ positive objects: 19038
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">oob_score</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 </pre></div>
 
@@ -14962,7 +14961,7 @@ Wall time: 39.3 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">catboost</span> <span class="k">import</span> <span class="n">CatBoostClassifier</span>
@@ -14975,7 +14974,7 @@ Wall time: 39.3 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[44]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cat_features_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">train</span><span class="o">.</span><span class="n">dtypes</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">dtypes</span> <span class="o">==</span> <span class="s1">&#39;int64&#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -14988,7 +14987,7 @@ Wall time: 39.3 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cat_features_idx</span>
@@ -15004,7 +15003,7 @@ Wall time: 39.3 s
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[45]:</div>
+<div class="prompt output_prompt">Out[25]:</div>
 
 
 
@@ -15021,7 +15020,7 @@ Wall time: 39.3 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[47]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
@@ -15035,7 +15034,7 @@ Wall time: 39.3 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cat</span> <span class="o">=</span> <span class="n">CatBoostClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">thread_count</span><span class="o">=</span><span class="mi">72</span><span class="p">)</span>
@@ -16083,6 +16082,1051 @@ Wall time: 1min 35s
 
 <div class="output_text output_subarea output_execute_result">
 <pre>&lt;catboost.core.CatBoostClassifier at 0x7f3691167320&gt;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">time</span> cat.fit(X_train, y_train, cat_features=cat_features_idx)
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>0:	learn: 0.6646956	total: 155ms	remaining: 2m 34s
+1:	learn: 0.6370554	total: 267ms	remaining: 2m 13s
+2:	learn: 0.6157410	total: 357ms	remaining: 1m 58s
+3:	learn: 0.5944024	total: 479ms	remaining: 1m 59s
+4:	learn: 0.5768418	total: 587ms	remaining: 1m 56s
+5:	learn: 0.5606891	total: 708ms	remaining: 1m 57s
+6:	learn: 0.5470106	total: 816ms	remaining: 1m 55s
+7:	learn: 0.5350466	total: 931ms	remaining: 1m 55s
+8:	learn: 0.5259466	total: 1000ms	remaining: 1m 50s
+9:	learn: 0.5185023	total: 1.07s	remaining: 1m 45s
+10:	learn: 0.5099633	total: 1.17s	remaining: 1m 45s
+11:	learn: 0.5036732	total: 1.26s	remaining: 1m 43s
+12:	learn: 0.4962711	total: 1.37s	remaining: 1m 43s
+13:	learn: 0.4901022	total: 1.48s	remaining: 1m 44s
+14:	learn: 0.4847032	total: 1.59s	remaining: 1m 44s
+15:	learn: 0.4801683	total: 1.7s	remaining: 1m 44s
+16:	learn: 0.4763091	total: 1.8s	remaining: 1m 44s
+17:	learn: 0.4720401	total: 1.92s	remaining: 1m 44s
+18:	learn: 0.4682977	total: 2.04s	remaining: 1m 45s
+19:	learn: 0.4654739	total: 2.15s	remaining: 1m 45s
+20:	learn: 0.4627312	total: 2.27s	remaining: 1m 45s
+21:	learn: 0.4602105	total: 2.39s	remaining: 1m 46s
+22:	learn: 0.4579049	total: 2.52s	remaining: 1m 47s
+23:	learn: 0.4557181	total: 2.65s	remaining: 1m 47s
+24:	learn: 0.4540054	total: 2.77s	remaining: 1m 48s
+25:	learn: 0.4523991	total: 2.88s	remaining: 1m 47s
+26:	learn: 0.4505569	total: 2.98s	remaining: 1m 47s
+27:	learn: 0.4492792	total: 3.09s	remaining: 1m 47s
+28:	learn: 0.4471184	total: 3.22s	remaining: 1m 47s
+29:	learn: 0.4453156	total: 3.34s	remaining: 1m 48s
+30:	learn: 0.4440585	total: 3.46s	remaining: 1m 48s
+31:	learn: 0.4431319	total: 3.58s	remaining: 1m 48s
+32:	learn: 0.4418384	total: 3.7s	remaining: 1m 48s
+33:	learn: 0.4404561	total: 3.83s	remaining: 1m 48s
+34:	learn: 0.4397980	total: 3.95s	remaining: 1m 49s
+35:	learn: 0.4385188	total: 4.1s	remaining: 1m 49s
+36:	learn: 0.4373600	total: 4.26s	remaining: 1m 50s
+37:	learn: 0.4362276	total: 4.41s	remaining: 1m 51s
+38:	learn: 0.4353403	total: 4.54s	remaining: 1m 51s
+39:	learn: 0.4344197	total: 4.66s	remaining: 1m 51s
+40:	learn: 0.4335114	total: 4.77s	remaining: 1m 51s
+41:	learn: 0.4325442	total: 4.9s	remaining: 1m 51s
+42:	learn: 0.4316855	total: 5.04s	remaining: 1m 52s
+43:	learn: 0.4311181	total: 5.21s	remaining: 1m 53s
+44:	learn: 0.4303425	total: 5.37s	remaining: 1m 53s
+45:	learn: 0.4295882	total: 5.49s	remaining: 1m 53s
+46:	learn: 0.4288831	total: 5.61s	remaining: 1m 53s
+47:	learn: 0.4282538	total: 5.74s	remaining: 1m 53s
+48:	learn: 0.4276639	total: 5.89s	remaining: 1m 54s
+49:	learn: 0.4270796	total: 6.05s	remaining: 1m 54s
+50:	learn: 0.4265333	total: 6.2s	remaining: 1m 55s
+51:	learn: 0.4260868	total: 6.33s	remaining: 1m 55s
+52:	learn: 0.4257571	total: 6.46s	remaining: 1m 55s
+53:	learn: 0.4254307	total: 6.56s	remaining: 1m 55s
+54:	learn: 0.4248952	total: 6.69s	remaining: 1m 54s
+55:	learn: 0.4244742	total: 6.81s	remaining: 1m 54s
+56:	learn: 0.4240812	total: 6.93s	remaining: 1m 54s
+57:	learn: 0.4236962	total: 7.06s	remaining: 1m 54s
+58:	learn: 0.4234163	total: 7.19s	remaining: 1m 54s
+59:	learn: 0.4229386	total: 7.39s	remaining: 1m 55s
+60:	learn: 0.4226558	total: 7.51s	remaining: 1m 55s
+61:	learn: 0.4224113	total: 7.64s	remaining: 1m 55s
+62:	learn: 0.4219946	total: 7.77s	remaining: 1m 55s
+63:	learn: 0.4217124	total: 7.89s	remaining: 1m 55s
+64:	learn: 0.4213023	total: 8.01s	remaining: 1m 55s
+65:	learn: 0.4210333	total: 8.12s	remaining: 1m 54s
+66:	learn: 0.4207348	total: 8.25s	remaining: 1m 54s
+67:	learn: 0.4204112	total: 8.37s	remaining: 1m 54s
+68:	learn: 0.4200806	total: 8.52s	remaining: 1m 54s
+69:	learn: 0.4196691	total: 8.66s	remaining: 1m 55s
+70:	learn: 0.4193047	total: 8.78s	remaining: 1m 54s
+71:	learn: 0.4190677	total: 8.9s	remaining: 1m 54s
+72:	learn: 0.4187483	total: 9.03s	remaining: 1m 54s
+73:	learn: 0.4183777	total: 9.17s	remaining: 1m 54s
+74:	learn: 0.4179884	total: 9.3s	remaining: 1m 54s
+75:	learn: 0.4175162	total: 9.42s	remaining: 1m 54s
+76:	learn: 0.4173549	total: 9.55s	remaining: 1m 54s
+77:	learn: 0.4170123	total: 9.67s	remaining: 1m 54s
+78:	learn: 0.4167581	total: 9.8s	remaining: 1m 54s
+79:	learn: 0.4165399	total: 9.92s	remaining: 1m 54s
+80:	learn: 0.4163540	total: 10s	remaining: 1m 53s
+81:	learn: 0.4157678	total: 10.2s	remaining: 1m 53s
+82:	learn: 0.4155465	total: 10.3s	remaining: 1m 53s
+83:	learn: 0.4151421	total: 10.4s	remaining: 1m 53s
+84:	learn: 0.4146700	total: 10.5s	remaining: 1m 53s
+85:	learn: 0.4144166	total: 10.7s	remaining: 1m 53s
+86:	learn: 0.4142642	total: 10.8s	remaining: 1m 53s
+87:	learn: 0.4140709	total: 10.9s	remaining: 1m 53s
+88:	learn: 0.4138222	total: 11s	remaining: 1m 52s
+89:	learn: 0.4136710	total: 11.2s	remaining: 1m 52s
+90:	learn: 0.4135714	total: 11.3s	remaining: 1m 52s
+91:	learn: 0.4135322	total: 11.4s	remaining: 1m 52s
+92:	learn: 0.4133471	total: 11.5s	remaining: 1m 51s
+93:	learn: 0.4129385	total: 11.6s	remaining: 1m 52s
+94:	learn: 0.4128071	total: 11.7s	remaining: 1m 51s
+95:	learn: 0.4126657	total: 11.9s	remaining: 1m 51s
+96:	learn: 0.4124274	total: 12s	remaining: 1m 51s
+97:	learn: 0.4123074	total: 12.1s	remaining: 1m 51s
+98:	learn: 0.4121386	total: 12.2s	remaining: 1m 51s
+99:	learn: 0.4117583	total: 12.4s	remaining: 1m 51s
+100:	learn: 0.4116473	total: 12.5s	remaining: 1m 51s
+101:	learn: 0.4115459	total: 12.6s	remaining: 1m 51s
+102:	learn: 0.4114124	total: 12.8s	remaining: 1m 51s
+103:	learn: 0.4112007	total: 12.9s	remaining: 1m 50s
+104:	learn: 0.4110367	total: 13s	remaining: 1m 50s
+105:	learn: 0.4108678	total: 13.1s	remaining: 1m 50s
+106:	learn: 0.4107052	total: 13.3s	remaining: 1m 50s
+107:	learn: 0.4105367	total: 13.4s	remaining: 1m 50s
+108:	learn: 0.4105010	total: 13.5s	remaining: 1m 50s
+109:	learn: 0.4103172	total: 13.6s	remaining: 1m 50s
+110:	learn: 0.4099597	total: 13.8s	remaining: 1m 50s
+111:	learn: 0.4097918	total: 13.9s	remaining: 1m 50s
+112:	learn: 0.4096391	total: 14s	remaining: 1m 49s
+113:	learn: 0.4094674	total: 14.1s	remaining: 1m 49s
+114:	learn: 0.4093837	total: 14.3s	remaining: 1m 49s
+115:	learn: 0.4092854	total: 14.4s	remaining: 1m 49s
+116:	learn: 0.4090181	total: 14.5s	remaining: 1m 49s
+117:	learn: 0.4089238	total: 14.6s	remaining: 1m 49s
+118:	learn: 0.4088416	total: 14.8s	remaining: 1m 49s
+119:	learn: 0.4085667	total: 14.9s	remaining: 1m 49s
+120:	learn: 0.4084391	total: 15s	remaining: 1m 49s
+121:	learn: 0.4083065	total: 15.1s	remaining: 1m 48s
+122:	learn: 0.4081060	total: 15.3s	remaining: 1m 48s
+123:	learn: 0.4079127	total: 15.4s	remaining: 1m 48s
+124:	learn: 0.4078109	total: 15.5s	remaining: 1m 48s
+125:	learn: 0.4076813	total: 15.7s	remaining: 1m 48s
+126:	learn: 0.4076054	total: 15.8s	remaining: 1m 48s
+127:	learn: 0.4074540	total: 15.9s	remaining: 1m 48s
+128:	learn: 0.4073820	total: 16s	remaining: 1m 48s
+129:	learn: 0.4073312	total: 16.1s	remaining: 1m 48s
+130:	learn: 0.4071766	total: 16.3s	remaining: 1m 48s
+131:	learn: 0.4070559	total: 16.4s	remaining: 1m 47s
+132:	learn: 0.4069210	total: 16.5s	remaining: 1m 47s
+133:	learn: 0.4068583	total: 16.7s	remaining: 1m 47s
+134:	learn: 0.4068172	total: 16.8s	remaining: 1m 47s
+135:	learn: 0.4067442	total: 16.9s	remaining: 1m 47s
+136:	learn: 0.4065941	total: 17s	remaining: 1m 47s
+137:	learn: 0.4064200	total: 17.2s	remaining: 1m 47s
+138:	learn: 0.4062415	total: 17.3s	remaining: 1m 47s
+139:	learn: 0.4061810	total: 17.4s	remaining: 1m 46s
+140:	learn: 0.4061517	total: 17.5s	remaining: 1m 46s
+141:	learn: 0.4060782	total: 17.7s	remaining: 1m 46s
+142:	learn: 0.4059835	total: 17.8s	remaining: 1m 46s
+143:	learn: 0.4059189	total: 17.9s	remaining: 1m 46s
+144:	learn: 0.4057962	total: 18s	remaining: 1m 46s
+145:	learn: 0.4057392	total: 18.2s	remaining: 1m 46s
+146:	learn: 0.4056366	total: 18.3s	remaining: 1m 46s
+147:	learn: 0.4055497	total: 18.4s	remaining: 1m 46s
+148:	learn: 0.4054949	total: 18.6s	remaining: 1m 45s
+149:	learn: 0.4054096	total: 18.7s	remaining: 1m 45s
+150:	learn: 0.4053455	total: 18.8s	remaining: 1m 45s
+151:	learn: 0.4052264	total: 18.9s	remaining: 1m 45s
+152:	learn: 0.4051391	total: 19s	remaining: 1m 45s
+153:	learn: 0.4051070	total: 19.2s	remaining: 1m 45s
+154:	learn: 0.4050825	total: 19.3s	remaining: 1m 45s
+155:	learn: 0.4050309	total: 19.4s	remaining: 1m 44s
+156:	learn: 0.4049805	total: 19.5s	remaining: 1m 44s
+157:	learn: 0.4048569	total: 19.6s	remaining: 1m 44s
+158:	learn: 0.4048357	total: 19.7s	remaining: 1m 44s
+159:	learn: 0.4047146	total: 19.9s	remaining: 1m 44s
+160:	learn: 0.4046012	total: 20s	remaining: 1m 44s
+161:	learn: 0.4045328	total: 20.1s	remaining: 1m 44s
+162:	learn: 0.4044631	total: 20.3s	remaining: 1m 44s
+163:	learn: 0.4043407	total: 20.4s	remaining: 1m 44s
+164:	learn: 0.4042296	total: 20.5s	remaining: 1m 43s
+165:	learn: 0.4041584	total: 20.6s	remaining: 1m 43s
+166:	learn: 0.4040677	total: 20.7s	remaining: 1m 43s
+167:	learn: 0.4040058	total: 20.9s	remaining: 1m 43s
+168:	learn: 0.4039674	total: 21s	remaining: 1m 43s
+169:	learn: 0.4038775	total: 21.2s	remaining: 1m 43s
+170:	learn: 0.4038718	total: 21.3s	remaining: 1m 43s
+171:	learn: 0.4037775	total: 21.5s	remaining: 1m 43s
+172:	learn: 0.4036917	total: 21.6s	remaining: 1m 43s
+173:	learn: 0.4036246	total: 21.8s	remaining: 1m 43s
+174:	learn: 0.4035345	total: 21.9s	remaining: 1m 43s
+175:	learn: 0.4034969	total: 22.1s	remaining: 1m 43s
+176:	learn: 0.4033504	total: 22.2s	remaining: 1m 43s
+177:	learn: 0.4033222	total: 22.3s	remaining: 1m 43s
+178:	learn: 0.4032691	total: 22.4s	remaining: 1m 42s
+179:	learn: 0.4032262	total: 22.5s	remaining: 1m 42s
+180:	learn: 0.4031535	total: 22.7s	remaining: 1m 42s
+181:	learn: 0.4031089	total: 22.8s	remaining: 1m 42s
+182:	learn: 0.4030498	total: 22.9s	remaining: 1m 42s
+183:	learn: 0.4029546	total: 23.1s	remaining: 1m 42s
+184:	learn: 0.4029148	total: 23.2s	remaining: 1m 42s
+185:	learn: 0.4028166	total: 23.3s	remaining: 1m 42s
+186:	learn: 0.4027860	total: 23.4s	remaining: 1m 41s
+187:	learn: 0.4027316	total: 23.6s	remaining: 1m 41s
+188:	learn: 0.4026840	total: 23.7s	remaining: 1m 41s
+189:	learn: 0.4026136	total: 23.8s	remaining: 1m 41s
+190:	learn: 0.4025894	total: 23.9s	remaining: 1m 41s
+191:	learn: 0.4025000	total: 24.1s	remaining: 1m 41s
+192:	learn: 0.4024661	total: 24.2s	remaining: 1m 41s
+193:	learn: 0.4023712	total: 24.3s	remaining: 1m 41s
+194:	learn: 0.4023083	total: 24.4s	remaining: 1m 40s
+195:	learn: 0.4022540	total: 24.6s	remaining: 1m 40s
+196:	learn: 0.4021808	total: 24.7s	remaining: 1m 40s
+197:	learn: 0.4020740	total: 24.8s	remaining: 1m 40s
+198:	learn: 0.4020010	total: 24.9s	remaining: 1m 40s
+199:	learn: 0.4018961	total: 25.1s	remaining: 1m 40s
+200:	learn: 0.4018080	total: 25.2s	remaining: 1m 40s
+201:	learn: 0.4017518	total: 25.3s	remaining: 1m 40s
+202:	learn: 0.4017287	total: 25.4s	remaining: 1m 39s
+203:	learn: 0.4016664	total: 25.6s	remaining: 1m 39s
+204:	learn: 0.4016004	total: 25.7s	remaining: 1m 39s
+205:	learn: 0.4015267	total: 25.8s	remaining: 1m 39s
+206:	learn: 0.4014792	total: 25.9s	remaining: 1m 39s
+207:	learn: 0.4014255	total: 26.1s	remaining: 1m 39s
+208:	learn: 0.4013663	total: 26.2s	remaining: 1m 39s
+209:	learn: 0.4013224	total: 26.3s	remaining: 1m 38s
+210:	learn: 0.4012442	total: 26.4s	remaining: 1m 38s
+211:	learn: 0.4011741	total: 26.6s	remaining: 1m 38s
+212:	learn: 0.4011272	total: 26.7s	remaining: 1m 38s
+213:	learn: 0.4010218	total: 26.8s	remaining: 1m 38s
+214:	learn: 0.4009306	total: 26.9s	remaining: 1m 38s
+215:	learn: 0.4008593	total: 27.1s	remaining: 1m 38s
+216:	learn: 0.4007607	total: 27.2s	remaining: 1m 38s
+217:	learn: 0.4006903	total: 27.3s	remaining: 1m 37s
+218:	learn: 0.4006380	total: 27.4s	remaining: 1m 37s
+219:	learn: 0.4005511	total: 27.6s	remaining: 1m 37s
+220:	learn: 0.4005312	total: 27.7s	remaining: 1m 37s
+221:	learn: 0.4004995	total: 27.8s	remaining: 1m 37s
+222:	learn: 0.4004721	total: 27.9s	remaining: 1m 37s
+223:	learn: 0.4004493	total: 28s	remaining: 1m 37s
+224:	learn: 0.4003944	total: 28.2s	remaining: 1m 36s
+225:	learn: 0.4003459	total: 28.3s	remaining: 1m 36s
+226:	learn: 0.4002797	total: 28.4s	remaining: 1m 36s
+227:	learn: 0.4001637	total: 28.5s	remaining: 1m 36s
+228:	learn: 0.4001303	total: 28.6s	remaining: 1m 36s
+229:	learn: 0.4000768	total: 28.7s	remaining: 1m 36s
+230:	learn: 0.3999664	total: 28.9s	remaining: 1m 36s
+231:	learn: 0.3999284	total: 29s	remaining: 1m 35s
+232:	learn: 0.3998340	total: 29.1s	remaining: 1m 35s
+233:	learn: 0.3997614	total: 29.2s	remaining: 1m 35s
+234:	learn: 0.3997016	total: 29.3s	remaining: 1m 35s
+235:	learn: 0.3996764	total: 29.5s	remaining: 1m 35s
+236:	learn: 0.3995586	total: 29.6s	remaining: 1m 35s
+237:	learn: 0.3994793	total: 29.7s	remaining: 1m 35s
+238:	learn: 0.3993764	total: 29.8s	remaining: 1m 35s
+239:	learn: 0.3993093	total: 30s	remaining: 1m 34s
+240:	learn: 0.3992599	total: 30.1s	remaining: 1m 34s
+241:	learn: 0.3991907	total: 30.2s	remaining: 1m 34s
+242:	learn: 0.3991289	total: 30.4s	remaining: 1m 34s
+243:	learn: 0.3990626	total: 30.5s	remaining: 1m 34s
+244:	learn: 0.3990345	total: 30.6s	remaining: 1m 34s
+245:	learn: 0.3989689	total: 30.8s	remaining: 1m 34s
+246:	learn: 0.3989158	total: 30.9s	remaining: 1m 34s
+247:	learn: 0.3988444	total: 31s	remaining: 1m 34s
+248:	learn: 0.3987486	total: 31.2s	remaining: 1m 34s
+249:	learn: 0.3986966	total: 31.3s	remaining: 1m 33s
+250:	learn: 0.3986125	total: 31.5s	remaining: 1m 33s
+251:	learn: 0.3985782	total: 31.6s	remaining: 1m 33s
+252:	learn: 0.3985335	total: 31.8s	remaining: 1m 33s
+253:	learn: 0.3985073	total: 31.9s	remaining: 1m 33s
+254:	learn: 0.3984488	total: 32s	remaining: 1m 33s
+255:	learn: 0.3983419	total: 32.2s	remaining: 1m 33s
+256:	learn: 0.3982467	total: 32.4s	remaining: 1m 33s
+257:	learn: 0.3982066	total: 32.5s	remaining: 1m 33s
+258:	learn: 0.3981595	total: 32.7s	remaining: 1m 33s
+259:	learn: 0.3981142	total: 32.8s	remaining: 1m 33s
+260:	learn: 0.3980833	total: 33s	remaining: 1m 33s
+261:	learn: 0.3980131	total: 33.1s	remaining: 1m 33s
+262:	learn: 0.3979602	total: 33.2s	remaining: 1m 33s
+263:	learn: 0.3979074	total: 33.4s	remaining: 1m 33s
+264:	learn: 0.3978450	total: 33.5s	remaining: 1m 32s
+265:	learn: 0.3977842	total: 33.7s	remaining: 1m 32s
+266:	learn: 0.3977130	total: 33.8s	remaining: 1m 32s
+267:	learn: 0.3976178	total: 34s	remaining: 1m 32s
+268:	learn: 0.3975346	total: 34.1s	remaining: 1m 32s
+269:	learn: 0.3974622	total: 34.3s	remaining: 1m 32s
+270:	learn: 0.3974156	total: 34.4s	remaining: 1m 32s
+271:	learn: 0.3973873	total: 34.5s	remaining: 1m 32s
+272:	learn: 0.3973294	total: 34.7s	remaining: 1m 32s
+273:	learn: 0.3972570	total: 34.8s	remaining: 1m 32s
+274:	learn: 0.3972008	total: 34.9s	remaining: 1m 32s
+275:	learn: 0.3971650	total: 35.1s	remaining: 1m 32s
+276:	learn: 0.3971008	total: 35.2s	remaining: 1m 31s
+277:	learn: 0.3970519	total: 35.3s	remaining: 1m 31s
+278:	learn: 0.3970209	total: 35.5s	remaining: 1m 31s
+279:	learn: 0.3969892	total: 35.6s	remaining: 1m 31s
+280:	learn: 0.3969306	total: 35.7s	remaining: 1m 31s
+281:	learn: 0.3969045	total: 35.9s	remaining: 1m 31s
+282:	learn: 0.3968541	total: 36s	remaining: 1m 31s
+283:	learn: 0.3968163	total: 36.2s	remaining: 1m 31s
+284:	learn: 0.3967759	total: 36.3s	remaining: 1m 31s
+285:	learn: 0.3967411	total: 36.4s	remaining: 1m 30s
+286:	learn: 0.3967039	total: 36.6s	remaining: 1m 30s
+287:	learn: 0.3966649	total: 36.7s	remaining: 1m 30s
+288:	learn: 0.3966240	total: 36.8s	remaining: 1m 30s
+289:	learn: 0.3965528	total: 36.9s	remaining: 1m 30s
+290:	learn: 0.3965023	total: 37.1s	remaining: 1m 30s
+291:	learn: 0.3964234	total: 37.2s	remaining: 1m 30s
+292:	learn: 0.3963565	total: 37.3s	remaining: 1m 30s
+293:	learn: 0.3963307	total: 37.4s	remaining: 1m 29s
+294:	learn: 0.3962806	total: 37.6s	remaining: 1m 29s
+295:	learn: 0.3962197	total: 37.7s	remaining: 1m 29s
+296:	learn: 0.3961783	total: 37.8s	remaining: 1m 29s
+297:	learn: 0.3961543	total: 37.9s	remaining: 1m 29s
+298:	learn: 0.3960894	total: 38.1s	remaining: 1m 29s
+299:	learn: 0.3960295	total: 38.2s	remaining: 1m 29s
+300:	learn: 0.3959954	total: 38.3s	remaining: 1m 29s
+301:	learn: 0.3959413	total: 38.5s	remaining: 1m 28s
+302:	learn: 0.3958255	total: 38.6s	remaining: 1m 28s
+303:	learn: 0.3957751	total: 38.7s	remaining: 1m 28s
+304:	learn: 0.3957230	total: 38.8s	remaining: 1m 28s
+305:	learn: 0.3957027	total: 38.9s	remaining: 1m 28s
+306:	learn: 0.3956548	total: 39.1s	remaining: 1m 28s
+307:	learn: 0.3956064	total: 39.2s	remaining: 1m 28s
+308:	learn: 0.3955614	total: 39.3s	remaining: 1m 27s
+309:	learn: 0.3954572	total: 39.5s	remaining: 1m 27s
+310:	learn: 0.3954122	total: 39.6s	remaining: 1m 27s
+311:	learn: 0.3953611	total: 39.7s	remaining: 1m 27s
+312:	learn: 0.3953071	total: 39.8s	remaining: 1m 27s
+313:	learn: 0.3951729	total: 40s	remaining: 1m 27s
+314:	learn: 0.3951453	total: 40.1s	remaining: 1m 27s
+315:	learn: 0.3950964	total: 40.2s	remaining: 1m 27s
+316:	learn: 0.3950308	total: 40.4s	remaining: 1m 26s
+317:	learn: 0.3949586	total: 40.5s	remaining: 1m 26s
+318:	learn: 0.3949007	total: 40.6s	remaining: 1m 26s
+319:	learn: 0.3948247	total: 40.8s	remaining: 1m 26s
+320:	learn: 0.3947746	total: 40.9s	remaining: 1m 26s
+321:	learn: 0.3946894	total: 41s	remaining: 1m 26s
+322:	learn: 0.3946503	total: 41.1s	remaining: 1m 26s
+323:	learn: 0.3945953	total: 41.3s	remaining: 1m 26s
+324:	learn: 0.3945206	total: 41.4s	remaining: 1m 25s
+325:	learn: 0.3944840	total: 41.5s	remaining: 1m 25s
+326:	learn: 0.3944462	total: 41.6s	remaining: 1m 25s
+327:	learn: 0.3943763	total: 41.8s	remaining: 1m 25s
+328:	learn: 0.3943289	total: 41.9s	remaining: 1m 25s
+329:	learn: 0.3942935	total: 42s	remaining: 1m 25s
+330:	learn: 0.3942689	total: 42.1s	remaining: 1m 25s
+331:	learn: 0.3942104	total: 42.3s	remaining: 1m 25s
+332:	learn: 0.3941284	total: 42.4s	remaining: 1m 24s
+333:	learn: 0.3940937	total: 42.5s	remaining: 1m 24s
+334:	learn: 0.3940326	total: 42.7s	remaining: 1m 24s
+335:	learn: 0.3940059	total: 42.8s	remaining: 1m 24s
+336:	learn: 0.3939751	total: 42.9s	remaining: 1m 24s
+337:	learn: 0.3939381	total: 43s	remaining: 1m 24s
+338:	learn: 0.3938941	total: 43.2s	remaining: 1m 24s
+339:	learn: 0.3938009	total: 43.3s	remaining: 1m 24s
+340:	learn: 0.3937789	total: 43.4s	remaining: 1m 23s
+341:	learn: 0.3937468	total: 43.5s	remaining: 1m 23s
+342:	learn: 0.3937122	total: 43.7s	remaining: 1m 23s
+343:	learn: 0.3936624	total: 43.8s	remaining: 1m 23s
+344:	learn: 0.3936144	total: 43.9s	remaining: 1m 23s
+345:	learn: 0.3935963	total: 44s	remaining: 1m 23s
+346:	learn: 0.3935568	total: 44.1s	remaining: 1m 23s
+347:	learn: 0.3935319	total: 44.3s	remaining: 1m 22s
+348:	learn: 0.3934877	total: 44.4s	remaining: 1m 22s
+349:	learn: 0.3934461	total: 44.5s	remaining: 1m 22s
+350:	learn: 0.3934102	total: 44.6s	remaining: 1m 22s
+351:	learn: 0.3933855	total: 44.8s	remaining: 1m 22s
+352:	learn: 0.3933216	total: 44.9s	remaining: 1m 22s
+353:	learn: 0.3932663	total: 45s	remaining: 1m 22s
+354:	learn: 0.3932172	total: 45.2s	remaining: 1m 22s
+355:	learn: 0.3931730	total: 45.3s	remaining: 1m 21s
+356:	learn: 0.3931239	total: 45.4s	remaining: 1m 21s
+357:	learn: 0.3930786	total: 45.5s	remaining: 1m 21s
+358:	learn: 0.3930173	total: 45.7s	remaining: 1m 21s
+359:	learn: 0.3929877	total: 45.8s	remaining: 1m 21s
+360:	learn: 0.3929655	total: 45.9s	remaining: 1m 21s
+361:	learn: 0.3929413	total: 46s	remaining: 1m 21s
+362:	learn: 0.3929135	total: 46.2s	remaining: 1m 21s
+363:	learn: 0.3928933	total: 46.3s	remaining: 1m 20s
+364:	learn: 0.3928365	total: 46.4s	remaining: 1m 20s
+365:	learn: 0.3927814	total: 46.5s	remaining: 1m 20s
+366:	learn: 0.3927553	total: 46.6s	remaining: 1m 20s
+367:	learn: 0.3926949	total: 46.8s	remaining: 1m 20s
+368:	learn: 0.3926421	total: 46.9s	remaining: 1m 20s
+369:	learn: 0.3926193	total: 47s	remaining: 1m 20s
+370:	learn: 0.3925582	total: 47.2s	remaining: 1m 19s
+371:	learn: 0.3925338	total: 47.3s	remaining: 1m 19s
+372:	learn: 0.3924645	total: 47.4s	remaining: 1m 19s
+373:	learn: 0.3923962	total: 47.5s	remaining: 1m 19s
+374:	learn: 0.3923507	total: 47.7s	remaining: 1m 19s
+375:	learn: 0.3922936	total: 47.8s	remaining: 1m 19s
+376:	learn: 0.3922670	total: 47.9s	remaining: 1m 19s
+377:	learn: 0.3921940	total: 48.1s	remaining: 1m 19s
+378:	learn: 0.3921748	total: 48.2s	remaining: 1m 18s
+379:	learn: 0.3921421	total: 48.3s	remaining: 1m 18s
+380:	learn: 0.3920870	total: 48.4s	remaining: 1m 18s
+381:	learn: 0.3920513	total: 48.6s	remaining: 1m 18s
+382:	learn: 0.3920243	total: 48.7s	remaining: 1m 18s
+383:	learn: 0.3919721	total: 48.8s	remaining: 1m 18s
+384:	learn: 0.3919189	total: 48.9s	remaining: 1m 18s
+385:	learn: 0.3918744	total: 49s	remaining: 1m 18s
+386:	learn: 0.3918284	total: 49.2s	remaining: 1m 17s
+387:	learn: 0.3917864	total: 49.3s	remaining: 1m 17s
+388:	learn: 0.3917523	total: 49.4s	remaining: 1m 17s
+389:	learn: 0.3916691	total: 49.5s	remaining: 1m 17s
+390:	learn: 0.3916254	total: 49.7s	remaining: 1m 17s
+391:	learn: 0.3915921	total: 49.8s	remaining: 1m 17s
+392:	learn: 0.3915572	total: 49.9s	remaining: 1m 17s
+393:	learn: 0.3914815	total: 50s	remaining: 1m 16s
+394:	learn: 0.3914514	total: 50.2s	remaining: 1m 16s
+395:	learn: 0.3913786	total: 50.3s	remaining: 1m 16s
+396:	learn: 0.3913129	total: 50.4s	remaining: 1m 16s
+397:	learn: 0.3912588	total: 50.6s	remaining: 1m 16s
+398:	learn: 0.3912254	total: 50.7s	remaining: 1m 16s
+399:	learn: 0.3911953	total: 50.8s	remaining: 1m 16s
+400:	learn: 0.3911613	total: 50.9s	remaining: 1m 16s
+401:	learn: 0.3911307	total: 51.1s	remaining: 1m 15s
+402:	learn: 0.3910798	total: 51.2s	remaining: 1m 15s
+403:	learn: 0.3910477	total: 51.3s	remaining: 1m 15s
+404:	learn: 0.3910258	total: 51.4s	remaining: 1m 15s
+405:	learn: 0.3910031	total: 51.5s	remaining: 1m 15s
+406:	learn: 0.3909697	total: 51.7s	remaining: 1m 15s
+407:	learn: 0.3908960	total: 51.8s	remaining: 1m 15s
+408:	learn: 0.3908545	total: 51.9s	remaining: 1m 15s
+409:	learn: 0.3908067	total: 52.1s	remaining: 1m 14s
+410:	learn: 0.3907608	total: 52.2s	remaining: 1m 14s
+411:	learn: 0.3907210	total: 52.3s	remaining: 1m 14s
+412:	learn: 0.3906949	total: 52.5s	remaining: 1m 14s
+413:	learn: 0.3906528	total: 52.6s	remaining: 1m 14s
+414:	learn: 0.3906160	total: 52.7s	remaining: 1m 14s
+415:	learn: 0.3905793	total: 52.8s	remaining: 1m 14s
+416:	learn: 0.3905208	total: 53s	remaining: 1m 14s
+417:	learn: 0.3904719	total: 53.1s	remaining: 1m 13s
+418:	learn: 0.3904346	total: 53.3s	remaining: 1m 13s
+419:	learn: 0.3903809	total: 53.4s	remaining: 1m 13s
+420:	learn: 0.3903231	total: 53.6s	remaining: 1m 13s
+421:	learn: 0.3902710	total: 53.7s	remaining: 1m 13s
+422:	learn: 0.3902363	total: 53.9s	remaining: 1m 13s
+423:	learn: 0.3902033	total: 54s	remaining: 1m 13s
+424:	learn: 0.3901550	total: 54.2s	remaining: 1m 13s
+425:	learn: 0.3901237	total: 54.3s	remaining: 1m 13s
+426:	learn: 0.3900787	total: 54.5s	remaining: 1m 13s
+427:	learn: 0.3900284	total: 54.6s	remaining: 1m 13s
+428:	learn: 0.3899828	total: 54.8s	remaining: 1m 12s
+429:	learn: 0.3899241	total: 54.9s	remaining: 1m 12s
+430:	learn: 0.3898794	total: 55.1s	remaining: 1m 12s
+431:	learn: 0.3898630	total: 55.2s	remaining: 1m 12s
+432:	learn: 0.3898216	total: 55.3s	remaining: 1m 12s
+433:	learn: 0.3898048	total: 55.4s	remaining: 1m 12s
+434:	learn: 0.3897566	total: 55.6s	remaining: 1m 12s
+435:	learn: 0.3897400	total: 55.7s	remaining: 1m 12s
+436:	learn: 0.3896296	total: 55.8s	remaining: 1m 11s
+437:	learn: 0.3896054	total: 56s	remaining: 1m 11s
+438:	learn: 0.3895417	total: 56.1s	remaining: 1m 11s
+439:	learn: 0.3895295	total: 56.2s	remaining: 1m 11s
+440:	learn: 0.3895122	total: 56.4s	remaining: 1m 11s
+441:	learn: 0.3894761	total: 56.5s	remaining: 1m 11s
+442:	learn: 0.3894515	total: 56.7s	remaining: 1m 11s
+443:	learn: 0.3893862	total: 56.8s	remaining: 1m 11s
+444:	learn: 0.3893355	total: 56.9s	remaining: 1m 10s
+445:	learn: 0.3893067	total: 57.1s	remaining: 1m 10s
+446:	learn: 0.3892645	total: 57.2s	remaining: 1m 10s
+447:	learn: 0.3892144	total: 57.3s	remaining: 1m 10s
+448:	learn: 0.3891905	total: 57.5s	remaining: 1m 10s
+449:	learn: 0.3891764	total: 57.6s	remaining: 1m 10s
+450:	learn: 0.3891565	total: 57.7s	remaining: 1m 10s
+451:	learn: 0.3890538	total: 57.9s	remaining: 1m 10s
+452:	learn: 0.3889898	total: 58s	remaining: 1m 10s
+453:	learn: 0.3889271	total: 58.1s	remaining: 1m 9s
+454:	learn: 0.3888830	total: 58.2s	remaining: 1m 9s
+455:	learn: 0.3888597	total: 58.4s	remaining: 1m 9s
+456:	learn: 0.3888275	total: 58.5s	remaining: 1m 9s
+457:	learn: 0.3888044	total: 58.6s	remaining: 1m 9s
+458:	learn: 0.3887696	total: 58.7s	remaining: 1m 9s
+459:	learn: 0.3887165	total: 58.9s	remaining: 1m 9s
+460:	learn: 0.3886546	total: 59s	remaining: 1m 8s
+461:	learn: 0.3886076	total: 59.1s	remaining: 1m 8s
+462:	learn: 0.3885206	total: 59.2s	remaining: 1m 8s
+463:	learn: 0.3885059	total: 59.4s	remaining: 1m 8s
+464:	learn: 0.3884905	total: 59.5s	remaining: 1m 8s
+465:	learn: 0.3884664	total: 59.6s	remaining: 1m 8s
+466:	learn: 0.3884531	total: 59.8s	remaining: 1m 8s
+467:	learn: 0.3884100	total: 59.9s	remaining: 1m 8s
+468:	learn: 0.3883642	total: 60s	remaining: 1m 7s
+469:	learn: 0.3883413	total: 1m	remaining: 1m 7s
+470:	learn: 0.3882290	total: 1m	remaining: 1m 7s
+471:	learn: 0.3882143	total: 1m	remaining: 1m 7s
+472:	learn: 0.3881874	total: 1m	remaining: 1m 7s
+473:	learn: 0.3881433	total: 1m	remaining: 1m 7s
+474:	learn: 0.3881080	total: 1m	remaining: 1m 7s
+475:	learn: 0.3880731	total: 1m	remaining: 1m 6s
+476:	learn: 0.3880376	total: 1m	remaining: 1m 6s
+477:	learn: 0.3880179	total: 1m 1s	remaining: 1m 6s
+478:	learn: 0.3879927	total: 1m 1s	remaining: 1m 6s
+479:	learn: 0.3879189	total: 1m 1s	remaining: 1m 6s
+480:	learn: 0.3878518	total: 1m 1s	remaining: 1m 6s
+481:	learn: 0.3878145	total: 1m 1s	remaining: 1m 6s
+482:	learn: 0.3877616	total: 1m 1s	remaining: 1m 6s
+483:	learn: 0.3877198	total: 1m 1s	remaining: 1m 5s
+484:	learn: 0.3876797	total: 1m 1s	remaining: 1m 5s
+485:	learn: 0.3876391	total: 1m 2s	remaining: 1m 5s
+486:	learn: 0.3875789	total: 1m 2s	remaining: 1m 5s
+487:	learn: 0.3875144	total: 1m 2s	remaining: 1m 5s
+488:	learn: 0.3874899	total: 1m 2s	remaining: 1m 5s
+489:	learn: 0.3874618	total: 1m 2s	remaining: 1m 5s
+490:	learn: 0.3874091	total: 1m 2s	remaining: 1m 5s
+491:	learn: 0.3873594	total: 1m 2s	remaining: 1m 4s
+492:	learn: 0.3873212	total: 1m 2s	remaining: 1m 4s
+493:	learn: 0.3872645	total: 1m 3s	remaining: 1m 4s
+494:	learn: 0.3872384	total: 1m 3s	remaining: 1m 4s
+495:	learn: 0.3872105	total: 1m 3s	remaining: 1m 4s
+496:	learn: 0.3871532	total: 1m 3s	remaining: 1m 4s
+497:	learn: 0.3870749	total: 1m 3s	remaining: 1m 4s
+498:	learn: 0.3870496	total: 1m 3s	remaining: 1m 3s
+499:	learn: 0.3870176	total: 1m 3s	remaining: 1m 3s
+500:	learn: 0.3869876	total: 1m 3s	remaining: 1m 3s
+501:	learn: 0.3869689	total: 1m 4s	remaining: 1m 3s
+502:	learn: 0.3869011	total: 1m 4s	remaining: 1m 3s
+503:	learn: 0.3868773	total: 1m 4s	remaining: 1m 3s
+504:	learn: 0.3868473	total: 1m 4s	remaining: 1m 3s
+505:	learn: 0.3868246	total: 1m 4s	remaining: 1m 3s
+506:	learn: 0.3867684	total: 1m 4s	remaining: 1m 2s
+507:	learn: 0.3867593	total: 1m 4s	remaining: 1m 2s
+508:	learn: 0.3867270	total: 1m 4s	remaining: 1m 2s
+509:	learn: 0.3866664	total: 1m 5s	remaining: 1m 2s
+510:	learn: 0.3866348	total: 1m 5s	remaining: 1m 2s
+511:	learn: 0.3865805	total: 1m 5s	remaining: 1m 2s
+512:	learn: 0.3865631	total: 1m 5s	remaining: 1m 2s
+513:	learn: 0.3865351	total: 1m 5s	remaining: 1m 2s
+514:	learn: 0.3864763	total: 1m 5s	remaining: 1m 1s
+515:	learn: 0.3864614	total: 1m 5s	remaining: 1m 1s
+516:	learn: 0.3864416	total: 1m 6s	remaining: 1m 1s
+517:	learn: 0.3864051	total: 1m 6s	remaining: 1m 1s
+518:	learn: 0.3863736	total: 1m 6s	remaining: 1m 1s
+519:	learn: 0.3863385	total: 1m 6s	remaining: 1m 1s
+520:	learn: 0.3863100	total: 1m 6s	remaining: 1m 1s
+521:	learn: 0.3862567	total: 1m 6s	remaining: 1m 1s
+522:	learn: 0.3862365	total: 1m 6s	remaining: 1m
+523:	learn: 0.3861960	total: 1m 6s	remaining: 1m
+524:	learn: 0.3861541	total: 1m 7s	remaining: 1m
+525:	learn: 0.3861324	total: 1m 7s	remaining: 1m
+526:	learn: 0.3860744	total: 1m 7s	remaining: 1m
+527:	learn: 0.3860498	total: 1m 7s	remaining: 1m
+528:	learn: 0.3860368	total: 1m 7s	remaining: 1m
+529:	learn: 0.3859931	total: 1m 7s	remaining: 1m
+530:	learn: 0.3859719	total: 1m 7s	remaining: 60s
+531:	learn: 0.3859379	total: 1m 8s	remaining: 59.9s
+532:	learn: 0.3858971	total: 1m 8s	remaining: 59.7s
+533:	learn: 0.3858617	total: 1m 8s	remaining: 59.6s
+534:	learn: 0.3858206	total: 1m 8s	remaining: 59.5s
+535:	learn: 0.3857758	total: 1m 8s	remaining: 59.4s
+536:	learn: 0.3857127	total: 1m 8s	remaining: 59.2s
+537:	learn: 0.3856977	total: 1m 8s	remaining: 59.1s
+538:	learn: 0.3856352	total: 1m 9s	remaining: 59s
+539:	learn: 0.3855797	total: 1m 9s	remaining: 58.9s
+540:	learn: 0.3855617	total: 1m 9s	remaining: 58.8s
+541:	learn: 0.3855418	total: 1m 9s	remaining: 58.6s
+542:	learn: 0.3854851	total: 1m 9s	remaining: 58.5s
+543:	learn: 0.3854316	total: 1m 9s	remaining: 58.4s
+544:	learn: 0.3854030	total: 1m 9s	remaining: 58.2s
+545:	learn: 0.3853730	total: 1m 9s	remaining: 58.1s
+546:	learn: 0.3853546	total: 1m 10s	remaining: 58s
+547:	learn: 0.3852965	total: 1m 10s	remaining: 57.8s
+548:	learn: 0.3852605	total: 1m 10s	remaining: 57.7s
+549:	learn: 0.3852292	total: 1m 10s	remaining: 57.6s
+550:	learn: 0.3851874	total: 1m 10s	remaining: 57.5s
+551:	learn: 0.3851095	total: 1m 10s	remaining: 57.4s
+552:	learn: 0.3850814	total: 1m 10s	remaining: 57.2s
+553:	learn: 0.3850474	total: 1m 10s	remaining: 57.1s
+554:	learn: 0.3850110	total: 1m 11s	remaining: 57s
+555:	learn: 0.3849861	total: 1m 11s	remaining: 56.8s
+556:	learn: 0.3849557	total: 1m 11s	remaining: 56.7s
+557:	learn: 0.3849208	total: 1m 11s	remaining: 56.6s
+558:	learn: 0.3848845	total: 1m 11s	remaining: 56.5s
+559:	learn: 0.3848524	total: 1m 11s	remaining: 56.3s
+560:	learn: 0.3848302	total: 1m 11s	remaining: 56.2s
+561:	learn: 0.3848031	total: 1m 11s	remaining: 56.1s
+562:	learn: 0.3847803	total: 1m 12s	remaining: 55.9s
+563:	learn: 0.3847581	total: 1m 12s	remaining: 55.8s
+564:	learn: 0.3847365	total: 1m 12s	remaining: 55.7s
+565:	learn: 0.3846900	total: 1m 12s	remaining: 55.6s
+566:	learn: 0.3846630	total: 1m 12s	remaining: 55.4s
+567:	learn: 0.3846286	total: 1m 12s	remaining: 55.3s
+568:	learn: 0.3845894	total: 1m 12s	remaining: 55.2s
+569:	learn: 0.3845711	total: 1m 12s	remaining: 55s
+570:	learn: 0.3845481	total: 1m 13s	remaining: 54.9s
+571:	learn: 0.3845057	total: 1m 13s	remaining: 54.8s
+572:	learn: 0.3844674	total: 1m 13s	remaining: 54.6s
+573:	learn: 0.3844294	total: 1m 13s	remaining: 54.5s
+574:	learn: 0.3843774	total: 1m 13s	remaining: 54.4s
+575:	learn: 0.3843626	total: 1m 13s	remaining: 54.2s
+576:	learn: 0.3843490	total: 1m 13s	remaining: 54.1s
+577:	learn: 0.3843086	total: 1m 13s	remaining: 54s
+578:	learn: 0.3842612	total: 1m 14s	remaining: 53.9s
+579:	learn: 0.3842313	total: 1m 14s	remaining: 53.7s
+580:	learn: 0.3842189	total: 1m 14s	remaining: 53.6s
+581:	learn: 0.3841811	total: 1m 14s	remaining: 53.5s
+582:	learn: 0.3841637	total: 1m 14s	remaining: 53.3s
+583:	learn: 0.3841218	total: 1m 14s	remaining: 53.2s
+584:	learn: 0.3840798	total: 1m 14s	remaining: 53.1s
+585:	learn: 0.3840491	total: 1m 14s	remaining: 53s
+586:	learn: 0.3839981	total: 1m 15s	remaining: 52.8s
+587:	learn: 0.3839531	total: 1m 15s	remaining: 52.7s
+588:	learn: 0.3839299	total: 1m 15s	remaining: 52.6s
+589:	learn: 0.3839073	total: 1m 15s	remaining: 52.5s
+590:	learn: 0.3838766	total: 1m 15s	remaining: 52.3s
+591:	learn: 0.3838301	total: 1m 15s	remaining: 52.2s
+592:	learn: 0.3837829	total: 1m 15s	remaining: 52.1s
+593:	learn: 0.3837410	total: 1m 15s	remaining: 51.9s
+594:	learn: 0.3837277	total: 1m 16s	remaining: 51.8s
+595:	learn: 0.3836928	total: 1m 16s	remaining: 51.7s
+596:	learn: 0.3836624	total: 1m 16s	remaining: 51.6s
+597:	learn: 0.3836234	total: 1m 16s	remaining: 51.4s
+598:	learn: 0.3835959	total: 1m 16s	remaining: 51.3s
+599:	learn: 0.3835659	total: 1m 16s	remaining: 51.2s
+600:	learn: 0.3835013	total: 1m 16s	remaining: 51.1s
+601:	learn: 0.3834643	total: 1m 17s	remaining: 50.9s
+602:	learn: 0.3834309	total: 1m 17s	remaining: 50.8s
+603:	learn: 0.3834139	total: 1m 17s	remaining: 50.7s
+604:	learn: 0.3833794	total: 1m 17s	remaining: 50.6s
+605:	learn: 0.3833474	total: 1m 17s	remaining: 50.4s
+606:	learn: 0.3832958	total: 1m 17s	remaining: 50.3s
+607:	learn: 0.3832674	total: 1m 17s	remaining: 50.2s
+608:	learn: 0.3831949	total: 1m 17s	remaining: 50.1s
+609:	learn: 0.3831670	total: 1m 18s	remaining: 49.9s
+610:	learn: 0.3831406	total: 1m 18s	remaining: 49.8s
+611:	learn: 0.3831169	total: 1m 18s	remaining: 49.7s
+612:	learn: 0.3830880	total: 1m 18s	remaining: 49.5s
+613:	learn: 0.3830624	total: 1m 18s	remaining: 49.4s
+614:	learn: 0.3830276	total: 1m 18s	remaining: 49.3s
+615:	learn: 0.3830103	total: 1m 18s	remaining: 49.2s
+616:	learn: 0.3829589	total: 1m 18s	remaining: 49s
+617:	learn: 0.3829506	total: 1m 19s	remaining: 48.9s
+618:	learn: 0.3828975	total: 1m 19s	remaining: 48.8s
+619:	learn: 0.3828578	total: 1m 19s	remaining: 48.7s
+620:	learn: 0.3828377	total: 1m 19s	remaining: 48.5s
+621:	learn: 0.3828290	total: 1m 19s	remaining: 48.4s
+622:	learn: 0.3828050	total: 1m 19s	remaining: 48.3s
+623:	learn: 0.3827797	total: 1m 19s	remaining: 48.1s
+624:	learn: 0.3827438	total: 1m 20s	remaining: 48s
+625:	learn: 0.3827107	total: 1m 20s	remaining: 47.9s
+626:	learn: 0.3826679	total: 1m 20s	remaining: 47.8s
+627:	learn: 0.3826254	total: 1m 20s	remaining: 47.6s
+628:	learn: 0.3825966	total: 1m 20s	remaining: 47.5s
+629:	learn: 0.3825750	total: 1m 20s	remaining: 47.4s
+630:	learn: 0.3825415	total: 1m 20s	remaining: 47.2s
+631:	learn: 0.3824988	total: 1m 20s	remaining: 47.1s
+632:	learn: 0.3824722	total: 1m 21s	remaining: 47s
+633:	learn: 0.3824081	total: 1m 21s	remaining: 46.9s
+634:	learn: 0.3823872	total: 1m 21s	remaining: 46.7s
+635:	learn: 0.3823435	total: 1m 21s	remaining: 46.6s
+636:	learn: 0.3823162	total: 1m 21s	remaining: 46.5s
+637:	learn: 0.3822641	total: 1m 21s	remaining: 46.3s
+638:	learn: 0.3822256	total: 1m 21s	remaining: 46.2s
+639:	learn: 0.3821983	total: 1m 21s	remaining: 46.1s
+640:	learn: 0.3821676	total: 1m 22s	remaining: 46s
+641:	learn: 0.3821419	total: 1m 22s	remaining: 45.8s
+642:	learn: 0.3821068	total: 1m 22s	remaining: 45.7s
+643:	learn: 0.3820722	total: 1m 22s	remaining: 45.6s
+644:	learn: 0.3820325	total: 1m 22s	remaining: 45.4s
+645:	learn: 0.3819854	total: 1m 22s	remaining: 45.3s
+646:	learn: 0.3819696	total: 1m 22s	remaining: 45.2s
+647:	learn: 0.3819489	total: 1m 22s	remaining: 45.1s
+648:	learn: 0.3819042	total: 1m 23s	remaining: 44.9s
+649:	learn: 0.3818602	total: 1m 23s	remaining: 44.8s
+650:	learn: 0.3818291	total: 1m 23s	remaining: 44.7s
+651:	learn: 0.3817789	total: 1m 23s	remaining: 44.5s
+652:	learn: 0.3817403	total: 1m 23s	remaining: 44.4s
+653:	learn: 0.3817161	total: 1m 23s	remaining: 44.3s
+654:	learn: 0.3816451	total: 1m 23s	remaining: 44.1s
+655:	learn: 0.3815980	total: 1m 23s	remaining: 44s
+656:	learn: 0.3815691	total: 1m 24s	remaining: 43.9s
+657:	learn: 0.3815075	total: 1m 24s	remaining: 43.8s
+658:	learn: 0.3814645	total: 1m 24s	remaining: 43.7s
+659:	learn: 0.3814372	total: 1m 24s	remaining: 43.5s
+660:	learn: 0.3813864	total: 1m 24s	remaining: 43.4s
+661:	learn: 0.3813436	total: 1m 24s	remaining: 43.3s
+662:	learn: 0.3812922	total: 1m 24s	remaining: 43.1s
+663:	learn: 0.3812517	total: 1m 25s	remaining: 43s
+664:	learn: 0.3812062	total: 1m 25s	remaining: 42.9s
+665:	learn: 0.3811591	total: 1m 25s	remaining: 42.8s
+666:	learn: 0.3811167	total: 1m 25s	remaining: 42.6s
+667:	learn: 0.3811004	total: 1m 25s	remaining: 42.5s
+668:	learn: 0.3810727	total: 1m 25s	remaining: 42.4s
+669:	learn: 0.3810030	total: 1m 25s	remaining: 42.2s
+670:	learn: 0.3809619	total: 1m 25s	remaining: 42.1s
+671:	learn: 0.3809485	total: 1m 25s	remaining: 42s
+672:	learn: 0.3809226	total: 1m 26s	remaining: 41.8s
+673:	learn: 0.3808957	total: 1m 26s	remaining: 41.7s
+674:	learn: 0.3808699	total: 1m 26s	remaining: 41.6s
+675:	learn: 0.3808556	total: 1m 26s	remaining: 41.5s
+676:	learn: 0.3808058	total: 1m 26s	remaining: 41.3s
+677:	learn: 0.3807528	total: 1m 26s	remaining: 41.2s
+678:	learn: 0.3806956	total: 1m 26s	remaining: 41.1s
+679:	learn: 0.3806415	total: 1m 27s	remaining: 41s
+680:	learn: 0.3805724	total: 1m 27s	remaining: 40.8s
+681:	learn: 0.3804815	total: 1m 27s	remaining: 40.7s
+682:	learn: 0.3804518	total: 1m 27s	remaining: 40.6s
+683:	learn: 0.3804274	total: 1m 27s	remaining: 40.4s
+684:	learn: 0.3804078	total: 1m 27s	remaining: 40.3s
+685:	learn: 0.3803599	total: 1m 27s	remaining: 40.2s
+686:	learn: 0.3803210	total: 1m 27s	remaining: 40s
+687:	learn: 0.3802726	total: 1m 28s	remaining: 39.9s
+688:	learn: 0.3802255	total: 1m 28s	remaining: 39.8s
+689:	learn: 0.3801746	total: 1m 28s	remaining: 39.6s
+690:	learn: 0.3800539	total: 1m 28s	remaining: 39.5s
+691:	learn: 0.3800246	total: 1m 28s	remaining: 39.4s
+692:	learn: 0.3799947	total: 1m 28s	remaining: 39.3s
+693:	learn: 0.3799639	total: 1m 28s	remaining: 39.1s
+694:	learn: 0.3799197	total: 1m 28s	remaining: 39s
+695:	learn: 0.3798765	total: 1m 28s	remaining: 38.9s
+696:	learn: 0.3798252	total: 1m 29s	remaining: 38.7s
+697:	learn: 0.3797849	total: 1m 29s	remaining: 38.6s
+698:	learn: 0.3797642	total: 1m 29s	remaining: 38.5s
+699:	learn: 0.3797350	total: 1m 29s	remaining: 38.4s
+700:	learn: 0.3796924	total: 1m 29s	remaining: 38.2s
+701:	learn: 0.3796571	total: 1m 29s	remaining: 38.1s
+702:	learn: 0.3796229	total: 1m 29s	remaining: 38s
+703:	learn: 0.3795782	total: 1m 30s	remaining: 37.8s
+704:	learn: 0.3795478	total: 1m 30s	remaining: 37.7s
+705:	learn: 0.3795311	total: 1m 30s	remaining: 37.6s
+706:	learn: 0.3795043	total: 1m 30s	remaining: 37.4s
+707:	learn: 0.3794781	total: 1m 30s	remaining: 37.3s
+708:	learn: 0.3794449	total: 1m 30s	remaining: 37.2s
+709:	learn: 0.3794089	total: 1m 30s	remaining: 37.1s
+710:	learn: 0.3793926	total: 1m 30s	remaining: 36.9s
+711:	learn: 0.3793088	total: 1m 30s	remaining: 36.8s
+712:	learn: 0.3792736	total: 1m 31s	remaining: 36.7s
+713:	learn: 0.3792377	total: 1m 31s	remaining: 36.5s
+714:	learn: 0.3792109	total: 1m 31s	remaining: 36.4s
+715:	learn: 0.3791829	total: 1m 31s	remaining: 36.3s
+716:	learn: 0.3791489	total: 1m 31s	remaining: 36.2s
+717:	learn: 0.3790931	total: 1m 31s	remaining: 36s
+718:	learn: 0.3790415	total: 1m 31s	remaining: 35.9s
+719:	learn: 0.3789933	total: 1m 31s	remaining: 35.8s
+720:	learn: 0.3789394	total: 1m 32s	remaining: 35.6s
+721:	learn: 0.3788782	total: 1m 32s	remaining: 35.5s
+722:	learn: 0.3788458	total: 1m 32s	remaining: 35.4s
+723:	learn: 0.3788168	total: 1m 32s	remaining: 35.3s
+724:	learn: 0.3787864	total: 1m 32s	remaining: 35.1s
+725:	learn: 0.3787585	total: 1m 32s	remaining: 35s
+726:	learn: 0.3787287	total: 1m 32s	remaining: 34.9s
+727:	learn: 0.3786935	total: 1m 33s	remaining: 34.8s
+728:	learn: 0.3786587	total: 1m 33s	remaining: 34.6s
+729:	learn: 0.3786196	total: 1m 33s	remaining: 34.5s
+730:	learn: 0.3785901	total: 1m 33s	remaining: 34.4s
+731:	learn: 0.3785626	total: 1m 33s	remaining: 34.3s
+732:	learn: 0.3785320	total: 1m 33s	remaining: 34.1s
+733:	learn: 0.3784674	total: 1m 33s	remaining: 34s
+734:	learn: 0.3784445	total: 1m 33s	remaining: 33.9s
+735:	learn: 0.3784209	total: 1m 34s	remaining: 33.7s
+736:	learn: 0.3783954	total: 1m 34s	remaining: 33.6s
+737:	learn: 0.3783734	total: 1m 34s	remaining: 33.5s
+738:	learn: 0.3783048	total: 1m 34s	remaining: 33.4s
+739:	learn: 0.3782749	total: 1m 34s	remaining: 33.2s
+740:	learn: 0.3782567	total: 1m 34s	remaining: 33.1s
+741:	learn: 0.3781934	total: 1m 34s	remaining: 33s
+742:	learn: 0.3781576	total: 1m 34s	remaining: 32.9s
+743:	learn: 0.3781228	total: 1m 35s	remaining: 32.7s
+744:	learn: 0.3780693	total: 1m 35s	remaining: 32.6s
+745:	learn: 0.3780531	total: 1m 35s	remaining: 32.5s
+746:	learn: 0.3780147	total: 1m 35s	remaining: 32.3s
+747:	learn: 0.3779849	total: 1m 35s	remaining: 32.2s
+748:	learn: 0.3779047	total: 1m 35s	remaining: 32.1s
+749:	learn: 0.3778640	total: 1m 35s	remaining: 32s
+750:	learn: 0.3778227	total: 1m 36s	remaining: 31.8s
+751:	learn: 0.3778021	total: 1m 36s	remaining: 31.7s
+752:	learn: 0.3777791	total: 1m 36s	remaining: 31.6s
+753:	learn: 0.3777462	total: 1m 36s	remaining: 31.5s
+754:	learn: 0.3777001	total: 1m 36s	remaining: 31.3s
+755:	learn: 0.3776620	total: 1m 36s	remaining: 31.2s
+756:	learn: 0.3776014	total: 1m 36s	remaining: 31.1s
+757:	learn: 0.3775837	total: 1m 36s	remaining: 31s
+758:	learn: 0.3775329	total: 1m 37s	remaining: 30.8s
+759:	learn: 0.3775175	total: 1m 37s	remaining: 30.7s
+760:	learn: 0.3774990	total: 1m 37s	remaining: 30.6s
+761:	learn: 0.3774625	total: 1m 37s	remaining: 30.5s
+762:	learn: 0.3774263	total: 1m 37s	remaining: 30.3s
+763:	learn: 0.3773903	total: 1m 37s	remaining: 30.2s
+764:	learn: 0.3773397	total: 1m 37s	remaining: 30.1s
+765:	learn: 0.3773004	total: 1m 38s	remaining: 29.9s
+766:	learn: 0.3772750	total: 1m 38s	remaining: 29.8s
+767:	learn: 0.3772674	total: 1m 38s	remaining: 29.7s
+768:	learn: 0.3772400	total: 1m 38s	remaining: 29.6s
+769:	learn: 0.3771992	total: 1m 38s	remaining: 29.4s
+770:	learn: 0.3771722	total: 1m 38s	remaining: 29.3s
+771:	learn: 0.3771322	total: 1m 38s	remaining: 29.2s
+772:	learn: 0.3770956	total: 1m 38s	remaining: 29s
+773:	learn: 0.3770532	total: 1m 39s	remaining: 28.9s
+774:	learn: 0.3770239	total: 1m 39s	remaining: 28.8s
+775:	learn: 0.3769678	total: 1m 39s	remaining: 28.7s
+776:	learn: 0.3769526	total: 1m 39s	remaining: 28.5s
+777:	learn: 0.3769115	total: 1m 39s	remaining: 28.4s
+778:	learn: 0.3768645	total: 1m 39s	remaining: 28.3s
+779:	learn: 0.3768387	total: 1m 39s	remaining: 28.1s
+780:	learn: 0.3768048	total: 1m 39s	remaining: 28s
+781:	learn: 0.3767628	total: 1m 39s	remaining: 27.9s
+782:	learn: 0.3767307	total: 1m 40s	remaining: 27.7s
+783:	learn: 0.3766590	total: 1m 40s	remaining: 27.6s
+784:	learn: 0.3766146	total: 1m 40s	remaining: 27.5s
+785:	learn: 0.3765654	total: 1m 40s	remaining: 27.4s
+786:	learn: 0.3765304	total: 1m 40s	remaining: 27.2s
+787:	learn: 0.3765021	total: 1m 40s	remaining: 27.1s
+788:	learn: 0.3764410	total: 1m 40s	remaining: 27s
+789:	learn: 0.3763919	total: 1m 40s	remaining: 26.8s
+790:	learn: 0.3763536	total: 1m 41s	remaining: 26.7s
+791:	learn: 0.3762849	total: 1m 41s	remaining: 26.6s
+792:	learn: 0.3762615	total: 1m 41s	remaining: 26.4s
+793:	learn: 0.3762537	total: 1m 41s	remaining: 26.3s
+794:	learn: 0.3762233	total: 1m 41s	remaining: 26.2s
+795:	learn: 0.3761804	total: 1m 41s	remaining: 26.1s
+796:	learn: 0.3761571	total: 1m 41s	remaining: 25.9s
+797:	learn: 0.3761195	total: 1m 41s	remaining: 25.8s
+798:	learn: 0.3760958	total: 1m 42s	remaining: 25.7s
+799:	learn: 0.3760512	total: 1m 42s	remaining: 25.6s
+800:	learn: 0.3760201	total: 1m 42s	remaining: 25.4s
+801:	learn: 0.3760018	total: 1m 42s	remaining: 25.3s
+802:	learn: 0.3759826	total: 1m 42s	remaining: 25.2s
+803:	learn: 0.3759700	total: 1m 42s	remaining: 25.1s
+804:	learn: 0.3759505	total: 1m 42s	remaining: 24.9s
+805:	learn: 0.3759261	total: 1m 43s	remaining: 24.8s
+806:	learn: 0.3758851	total: 1m 43s	remaining: 24.7s
+807:	learn: 0.3758644	total: 1m 43s	remaining: 24.6s
+808:	learn: 0.3758354	total: 1m 43s	remaining: 24.4s
+809:	learn: 0.3757872	total: 1m 43s	remaining: 24.3s
+810:	learn: 0.3757618	total: 1m 43s	remaining: 24.2s
+811:	learn: 0.3757369	total: 1m 43s	remaining: 24.1s
+812:	learn: 0.3757268	total: 1m 44s	remaining: 23.9s
+813:	learn: 0.3756697	total: 1m 44s	remaining: 23.8s
+814:	learn: 0.3756352	total: 1m 44s	remaining: 23.7s
+815:	learn: 0.3755994	total: 1m 44s	remaining: 23.6s
+816:	learn: 0.3755701	total: 1m 44s	remaining: 23.5s
+817:	learn: 0.3755479	total: 1m 44s	remaining: 23.3s
+818:	learn: 0.3755010	total: 1m 44s	remaining: 23.2s
+819:	learn: 0.3754345	total: 1m 45s	remaining: 23.1s
+820:	learn: 0.3754081	total: 1m 45s	remaining: 22.9s
+821:	learn: 0.3753715	total: 1m 45s	remaining: 22.8s
+822:	learn: 0.3753463	total: 1m 45s	remaining: 22.7s
+823:	learn: 0.3753057	total: 1m 45s	remaining: 22.6s
+824:	learn: 0.3752655	total: 1m 45s	remaining: 22.4s
+825:	learn: 0.3752462	total: 1m 45s	remaining: 22.3s
+826:	learn: 0.3752105	total: 1m 46s	remaining: 22.2s
+827:	learn: 0.3751705	total: 1m 46s	remaining: 22s
+828:	learn: 0.3751329	total: 1m 46s	remaining: 21.9s
+829:	learn: 0.3751002	total: 1m 46s	remaining: 21.8s
+830:	learn: 0.3750714	total: 1m 46s	remaining: 21.7s
+831:	learn: 0.3750479	total: 1m 46s	remaining: 21.5s
+832:	learn: 0.3749995	total: 1m 46s	remaining: 21.4s
+833:	learn: 0.3749831	total: 1m 46s	remaining: 21.3s
+834:	learn: 0.3749665	total: 1m 47s	remaining: 21.1s
+835:	learn: 0.3749287	total: 1m 47s	remaining: 21s
+836:	learn: 0.3748994	total: 1m 47s	remaining: 20.9s
+837:	learn: 0.3748616	total: 1m 47s	remaining: 20.8s
+838:	learn: 0.3748252	total: 1m 47s	remaining: 20.6s
+839:	learn: 0.3748073	total: 1m 47s	remaining: 20.5s
+840:	learn: 0.3747802	total: 1m 47s	remaining: 20.4s
+841:	learn: 0.3747600	total: 1m 47s	remaining: 20.2s
+842:	learn: 0.3747205	total: 1m 48s	remaining: 20.1s
+843:	learn: 0.3746912	total: 1m 48s	remaining: 20s
+844:	learn: 0.3746520	total: 1m 48s	remaining: 19.9s
+845:	learn: 0.3746104	total: 1m 48s	remaining: 19.7s
+846:	learn: 0.3745554	total: 1m 48s	remaining: 19.6s
+847:	learn: 0.3745231	total: 1m 48s	remaining: 19.5s
+848:	learn: 0.3745041	total: 1m 48s	remaining: 19.4s
+849:	learn: 0.3744627	total: 1m 48s	remaining: 19.2s
+850:	learn: 0.3744085	total: 1m 49s	remaining: 19.1s
+851:	learn: 0.3743683	total: 1m 49s	remaining: 19s
+852:	learn: 0.3743315	total: 1m 49s	remaining: 18.8s
+853:	learn: 0.3743033	total: 1m 49s	remaining: 18.7s
+854:	learn: 0.3742784	total: 1m 49s	remaining: 18.6s
+855:	learn: 0.3742336	total: 1m 49s	remaining: 18.5s
+856:	learn: 0.3741670	total: 1m 49s	remaining: 18.3s
+857:	learn: 0.3741622	total: 1m 49s	remaining: 18.2s
+858:	learn: 0.3741188	total: 1m 50s	remaining: 18.1s
+859:	learn: 0.3740886	total: 1m 50s	remaining: 17.9s
+860:	learn: 0.3740659	total: 1m 50s	remaining: 17.8s
+861:	learn: 0.3740491	total: 1m 50s	remaining: 17.7s
+862:	learn: 0.3740169	total: 1m 50s	remaining: 17.6s
+863:	learn: 0.3739868	total: 1m 50s	remaining: 17.4s
+864:	learn: 0.3739648	total: 1m 50s	remaining: 17.3s
+865:	learn: 0.3739485	total: 1m 50s	remaining: 17.2s
+866:	learn: 0.3739067	total: 1m 51s	remaining: 17s
+867:	learn: 0.3738783	total: 1m 51s	remaining: 16.9s
+868:	learn: 0.3738582	total: 1m 51s	remaining: 16.8s
+869:	learn: 0.3738163	total: 1m 51s	remaining: 16.7s
+870:	learn: 0.3737814	total: 1m 51s	remaining: 16.5s
+871:	learn: 0.3737449	total: 1m 51s	remaining: 16.4s
+872:	learn: 0.3737099	total: 1m 51s	remaining: 16.3s
+873:	learn: 0.3736793	total: 1m 51s	remaining: 16.1s
+874:	learn: 0.3736461	total: 1m 52s	remaining: 16s
+875:	learn: 0.3736149	total: 1m 52s	remaining: 15.9s
+876:	learn: 0.3735763	total: 1m 52s	remaining: 15.8s
+877:	learn: 0.3735587	total: 1m 52s	remaining: 15.6s
+878:	learn: 0.3735344	total: 1m 52s	remaining: 15.5s
+879:	learn: 0.3735197	total: 1m 52s	remaining: 15.4s
+880:	learn: 0.3734844	total: 1m 52s	remaining: 15.2s
+881:	learn: 0.3734471	total: 1m 52s	remaining: 15.1s
+882:	learn: 0.3734177	total: 1m 53s	remaining: 15s
+883:	learn: 0.3734044	total: 1m 53s	remaining: 14.9s
+884:	learn: 0.3733516	total: 1m 53s	remaining: 14.7s
+885:	learn: 0.3733200	total: 1m 53s	remaining: 14.6s
+886:	learn: 0.3732812	total: 1m 53s	remaining: 14.5s
+887:	learn: 0.3732566	total: 1m 53s	remaining: 14.3s
+888:	learn: 0.3731844	total: 1m 53s	remaining: 14.2s
+889:	learn: 0.3731526	total: 1m 53s	remaining: 14.1s
+890:	learn: 0.3731410	total: 1m 54s	remaining: 14s
+891:	learn: 0.3731162	total: 1m 54s	remaining: 13.8s
+892:	learn: 0.3730867	total: 1m 54s	remaining: 13.7s
+893:	learn: 0.3730516	total: 1m 54s	remaining: 13.6s
+894:	learn: 0.3730137	total: 1m 54s	remaining: 13.4s
+895:	learn: 0.3729972	total: 1m 54s	remaining: 13.3s
+896:	learn: 0.3729750	total: 1m 54s	remaining: 13.2s
+897:	learn: 0.3729490	total: 1m 54s	remaining: 13.1s
+898:	learn: 0.3728991	total: 1m 55s	remaining: 12.9s
+899:	learn: 0.3728618	total: 1m 55s	remaining: 12.8s
+900:	learn: 0.3728340	total: 1m 55s	remaining: 12.7s
+901:	learn: 0.3728170	total: 1m 55s	remaining: 12.5s
+902:	learn: 0.3727980	total: 1m 55s	remaining: 12.4s
+903:	learn: 0.3727613	total: 1m 55s	remaining: 12.3s
+904:	learn: 0.3727313	total: 1m 55s	remaining: 12.2s
+905:	learn: 0.3726969	total: 1m 55s	remaining: 12s
+906:	learn: 0.3726552	total: 1m 56s	remaining: 11.9s
+907:	learn: 0.3726336	total: 1m 56s	remaining: 11.8s
+908:	learn: 0.3726166	total: 1m 56s	remaining: 11.6s
+909:	learn: 0.3725808	total: 1m 56s	remaining: 11.5s
+910:	learn: 0.3725387	total: 1m 56s	remaining: 11.4s
+911:	learn: 0.3725184	total: 1m 56s	remaining: 11.3s
+912:	learn: 0.3724776	total: 1m 56s	remaining: 11.1s
+913:	learn: 0.3724398	total: 1m 56s	remaining: 11s
+914:	learn: 0.3724009	total: 1m 57s	remaining: 10.9s
+915:	learn: 0.3723819	total: 1m 57s	remaining: 10.7s
+916:	learn: 0.3723725	total: 1m 57s	remaining: 10.6s
+917:	learn: 0.3723373	total: 1m 57s	remaining: 10.5s
+918:	learn: 0.3723024	total: 1m 57s	remaining: 10.4s
+919:	learn: 0.3722770	total: 1m 57s	remaining: 10.2s
+920:	learn: 0.3722411	total: 1m 57s	remaining: 10.1s
+921:	learn: 0.3722202	total: 1m 58s	remaining: 9.98s
+922:	learn: 0.3721860	total: 1m 58s	remaining: 9.86s
+923:	learn: 0.3721552	total: 1m 58s	remaining: 9.73s
+924:	learn: 0.3721402	total: 1m 58s	remaining: 9.6s
+925:	learn: 0.3721067	total: 1m 58s	remaining: 9.47s
+926:	learn: 0.3720795	total: 1m 58s	remaining: 9.34s
+927:	learn: 0.3720350	total: 1m 58s	remaining: 9.21s
+928:	learn: 0.3720219	total: 1m 58s	remaining: 9.09s
+929:	learn: 0.3719844	total: 1m 59s	remaining: 8.96s
+930:	learn: 0.3719650	total: 1m 59s	remaining: 8.83s
+931:	learn: 0.3719202	total: 1m 59s	remaining: 8.7s
+932:	learn: 0.3719106	total: 1m 59s	remaining: 8.57s
+933:	learn: 0.3718725	total: 1m 59s	remaining: 8.44s
+934:	learn: 0.3718533	total: 1m 59s	remaining: 8.32s
+935:	learn: 0.3718223	total: 1m 59s	remaining: 8.19s
+936:	learn: 0.3717887	total: 1m 59s	remaining: 8.06s
+937:	learn: 0.3717396	total: 2m	remaining: 7.93s
+938:	learn: 0.3717224	total: 2m	remaining: 7.8s
+939:	learn: 0.3716791	total: 2m	remaining: 7.68s
+940:	learn: 0.3716457	total: 2m	remaining: 7.55s
+941:	learn: 0.3716202	total: 2m	remaining: 7.42s
+942:	learn: 0.3716043	total: 2m	remaining: 7.29s
+943:	learn: 0.3715824	total: 2m	remaining: 7.17s
+944:	learn: 0.3715506	total: 2m	remaining: 7.04s
+945:	learn: 0.3715260	total: 2m 1s	remaining: 6.91s
+946:	learn: 0.3714991	total: 2m 1s	remaining: 6.78s
+947:	learn: 0.3714784	total: 2m 1s	remaining: 6.65s
+948:	learn: 0.3714264	total: 2m 1s	remaining: 6.52s
+949:	learn: 0.3714178	total: 2m 1s	remaining: 6.39s
+950:	learn: 0.3713931	total: 2m 1s	remaining: 6.27s
+951:	learn: 0.3713458	total: 2m 1s	remaining: 6.14s
+952:	learn: 0.3713252	total: 2m 1s	remaining: 6.01s
+953:	learn: 0.3713011	total: 2m 2s	remaining: 5.88s
+954:	learn: 0.3712941	total: 2m 2s	remaining: 5.75s
+955:	learn: 0.3712592	total: 2m 2s	remaining: 5.63s
+956:	learn: 0.3712288	total: 2m 2s	remaining: 5.5s
+957:	learn: 0.3711861	total: 2m 2s	remaining: 5.37s
+958:	learn: 0.3711608	total: 2m 2s	remaining: 5.24s
+959:	learn: 0.3711076	total: 2m 2s	remaining: 5.12s
+960:	learn: 0.3710637	total: 2m 2s	remaining: 4.99s
+961:	learn: 0.3710172	total: 2m 3s	remaining: 4.86s
+962:	learn: 0.3709718	total: 2m 3s	remaining: 4.73s
+963:	learn: 0.3709267	total: 2m 3s	remaining: 4.6s
+964:	learn: 0.3708816	total: 2m 3s	remaining: 4.48s
+965:	learn: 0.3708582	total: 2m 3s	remaining: 4.35s
+966:	learn: 0.3708282	total: 2m 3s	remaining: 4.22s
+967:	learn: 0.3708081	total: 2m 3s	remaining: 4.09s
+968:	learn: 0.3707728	total: 2m 3s	remaining: 3.96s
+969:	learn: 0.3707408	total: 2m 4s	remaining: 3.84s
+970:	learn: 0.3706900	total: 2m 4s	remaining: 3.71s
+971:	learn: 0.3706656	total: 2m 4s	remaining: 3.58s
+972:	learn: 0.3706263	total: 2m 4s	remaining: 3.46s
+973:	learn: 0.3705984	total: 2m 4s	remaining: 3.33s
+974:	learn: 0.3705805	total: 2m 4s	remaining: 3.2s
+975:	learn: 0.3705593	total: 2m 4s	remaining: 3.07s
+976:	learn: 0.3705472	total: 2m 5s	remaining: 2.94s
+977:	learn: 0.3704952	total: 2m 5s	remaining: 2.81s
+978:	learn: 0.3704703	total: 2m 5s	remaining: 2.69s
+979:	learn: 0.3704331	total: 2m 5s	remaining: 2.56s
+980:	learn: 0.3703979	total: 2m 5s	remaining: 2.43s
+981:	learn: 0.3703517	total: 2m 5s	remaining: 2.3s
+982:	learn: 0.3702928	total: 2m 5s	remaining: 2.17s
+983:	learn: 0.3702724	total: 2m 5s	remaining: 2.05s
+984:	learn: 0.3702507	total: 2m 6s	remaining: 1.92s
+985:	learn: 0.3701852	total: 2m 6s	remaining: 1.79s
+986:	learn: 0.3701618	total: 2m 6s	remaining: 1.66s
+987:	learn: 0.3701129	total: 2m 6s	remaining: 1.53s
+988:	learn: 0.3700851	total: 2m 6s	remaining: 1.41s
+989:	learn: 0.3700644	total: 2m 6s	remaining: 1.28s
+990:	learn: 0.3700202	total: 2m 6s	remaining: 1.15s
+991:	learn: 0.3699922	total: 2m 6s	remaining: 1.02s
+992:	learn: 0.3699689	total: 2m 7s	remaining: 896ms
+993:	learn: 0.3699401	total: 2m 7s	remaining: 768ms
+994:	learn: 0.3699175	total: 2m 7s	remaining: 640ms
+995:	learn: 0.3698842	total: 2m 7s	remaining: 512ms
+996:	learn: 0.3698471	total: 2m 7s	remaining: 384ms
+997:	learn: 0.3698123	total: 2m 7s	remaining: 256ms
+998:	learn: 0.3697859	total: 2m 7s	remaining: 128ms
+999:	learn: 0.3697638	total: 2m 7s	remaining: 0us
+CPU times: user 11min 3s, sys: 3min 46s, total: 14min 49s
+Wall time: 2min 9s
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[28]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;catboost.core.CatBoostClassifier at 0x1a1d009eb8&gt;</pre>
 </div>
 
 </div>

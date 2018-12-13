@@ -29,7 +29,7 @@ get_ipython().run_line_magic('load_ext', 'watermark')
 get_ipython().run_line_magic('watermark', '-v -m -r -b -g -p numpy,pandas,sklearn,matplotlib,statsmodels,xgboost,catboost')
 
 
-# In[1]:
+# In[2]:
 
 
 import numpy as np
@@ -174,7 +174,7 @@ X_route_test = ohe.fit_transform(test.Route.values.reshape(-1, 1))
 
 # ### SELECT FEATURES
 
-# In[106]:
+# In[19]:
 
 
 def simple_xgb_cv(X, y, n_estimators=27, max_depth=5, seed=42,
@@ -205,7 +205,7 @@ get_ipython().run_cell_magic('time', '', "features = {'X_month_train': X_month_t
 
 # ### CONCATENATE DATA
 
-# In[21]:
+# In[20]:
 
 
 y = target.dep_delayed_15min.values
@@ -214,7 +214,7 @@ print('Size:', y.shape)
 print("positive objects:", y.sum())
 
 
-# In[23]:
+# In[21]:
 
 
 X = hstack([csr_matrix(X_month_train), 
@@ -246,19 +246,17 @@ X.shape, X_test.shape, y.shape
 
 # ### Simple Random forest
 
-# In[28]:
+# In[22]:
 
 
 X_train, X_valid, y_train, y_valid = train_test_split(
         X, y, train_size=0.7, random_state=42)
 
-rf = RandomForestClassifier(n_estimators=1000, n_jobs=-1, oob_score=True)
-
 
 # In[29]:
 
 
-get_ipython().run_cell_magic('time', '', 'rf.fit(X_train, y_train)')
+get_ipython().run_cell_magic('time', '', 'rf = RandomForestClassifier(n_estimators=1000, n_jobs=-1, oob_score=True)\nrf.fit(X_train, y_train)')
 
 
 # In[30]:
@@ -275,38 +273,44 @@ roc_auc_score(y_valid, rf.predict_proba(X_valid)[:,1])
 
 # ### Simple catboost
 
-# In[34]:
+# In[23]:
 
 
 from catboost import CatBoostClassifier
 
 
-# In[44]:
+# In[24]:
 
 
 cat_features_idx = np.where((train.dtypes == 'object') | (train.dtypes == 'int64'))[0].tolist()
 
 
-# In[45]:
+# In[25]:
 
 
 cat_features_idx
 
 
-# In[47]:
+# In[26]:
 
 
 X_train, X_valid, y_train, y_valid = train_test_split(
         train, target, train_size=0.7, random_state=42)
 
 
-# In[48]:
+# In[27]:
 
 
 cat = CatBoostClassifier(random_state=42, thread_count=72)
 
 
 # In[49]:
+
+
+get_ipython().run_line_magic('time', 'cat.fit(X_train, y_train, cat_features=cat_features_idx)')
+
+
+# In[28]:
 
 
 get_ipython().run_line_magic('time', 'cat.fit(X_train, y_train, cat_features=cat_features_idx)')

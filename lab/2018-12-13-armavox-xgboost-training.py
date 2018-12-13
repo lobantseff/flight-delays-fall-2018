@@ -8,20 +8,17 @@
 
 # ### Perform dataset preparing
 
-# In[7]:
+# In[2]:
 
 
-# pip install nbformat
-# execute `output.show()` to show output figures and text (if they are)
-%%capture output  
-get_ipython().run_line_magic('run', './2018-12-12-armavox-prepare-dataset.ipynb')
+get_ipython().run_cell_magic('capture', 'output  ', '# pip install nbformat\n# execute `output.show()` to show output figures and text (if they are)\n%run ./2018-12-12-armavox-prepare-dataset.ipynb')
 
 
 # ### Init required  modules
 
 # __Notebook environment__
 
-# In[18]:
+# In[3]:
 
 
 # pip install watermark
@@ -29,7 +26,7 @@ get_ipython().run_line_magic('load_ext', 'watermark')
 get_ipython().run_line_magic('watermark', '-v -m -r -b -g -p numpy,pandas,sklearn,matplotlib,statsmodels,xgboost,catboost')
 
 
-# In[96]:
+# In[5]:
 
 
 import numpy as np
@@ -58,21 +55,21 @@ warnings.filterwarnings('ignore')
 
 # ### IMPORT DATA
 
-# In[14]:
+# In[6]:
 
 
 train = pd.read_csv('../data/train.csv', index_col='idx')
 train.head(3)
 
 
-# In[15]:
+# In[7]:
 
 
 test = pd.read_csv('../data/test.csv', index_col='idx')
 test.head(3)
 
 
-# In[17]:
+# In[8]:
 
 
 target = pd.read_csv('../data/target.csv', index_col='idx')
@@ -81,7 +78,7 @@ target.head(3)
 
 # __Origin_Dest interaction: ``Route`` feature__
 
-# In[38]:
+# In[9]:
 
 
 train['Route'] = train['Origin'] + '_' + train['Dest']
@@ -90,82 +87,82 @@ test['Route'] = test['Origin'] + '_' + test['Dest']
 
 # ### FEATURES CONVERSION
 
-# In[68]:
+# In[10]:
 
 
 train.head(1)
 
 
-# In[44]:
+# In[11]:
 
 
 ohe = OneHotEncoder(categories='auto', sparse=False, handle_unknown='ignore')
 
 
-# In[45]:
+# In[12]:
 
 
 X_month_train = ohe.fit_transform(train.Month.values.reshape(-1, 1))
 X_month_test = ohe.transform(test.Month.values.reshape(-1, 1))
 
 
-# In[46]:
+# In[13]:
 
 
 X_dom_train = ohe.fit_transform(train.DayofMonth.values.reshape(-1, 1))
 X_dom_test = ohe.transform(test.DayofMonth.values.reshape(-1, 1))
 
 
-# In[47]:
+# In[14]:
 
 
 X_dow_train = ohe.fit_transform(train.DayOfWeek.values.reshape(-1, 1))
 X_dow_test = ohe.transform(test.DayOfWeek.values.reshape(-1, 1))
 
 
-# In[62]:
+# In[15]:
 
 
 X_hour_train = ohe.fit_transform(train.Hour.values.reshape(-1, 1))
 X_hour_test = ohe.transform(test.Hour.values.reshape(-1, 1))
 
 
-# In[63]:
+# In[16]:
 
 
 X_minute_train = ohe.fit_transform(train.Minute.values.reshape(-1, 1))
 X_minute_test = ohe.transform(test.Minute.values.reshape(-1, 1))
 
 
-# In[64]:
+# In[17]:
 
 
 X_isweekend_train = train.IsWeekend.values.reshape(-1, 1)
 X_isweekend_test = test.IsWeekend.values.reshape(-1, 1)
 
 
-# In[48]:
+# In[18]:
 
 
 X_carrier_train = ohe.fit_transform(train.UniqueCarrier.values.reshape(-1, 1))
 X_carrier_test = ohe.transform(test.UniqueCarrier.values.reshape(-1, 1))
 
 
-# In[49]:
+# In[19]:
 
 
 X_origin_train = ohe.fit_transform(train.Origin.values.reshape(-1, 1))
 X_origin_test = ohe.transform(test.Origin.values.reshape(-1, 1))
 
 
-# In[50]:
+# In[20]:
 
 
 X_dest_train = ohe.fit_transform(train.Dest.values.reshape(-1, 1))
 X_dest_test = ohe.transform(test.Dest.values.reshape(-1, 1))
 
 
-# In[51]:
+# In[21]:
 
 
 X_route_train = ohe.fit_transform(train.Route.values.reshape(-1, 1))
@@ -174,7 +171,7 @@ X_route_test = ohe.fit_transform(test.Route.values.reshape(-1, 1))
 
 # ### SELECT FEATURES
 
-# In[106]:
+# In[22]:
 
 
 def simple_xgb_cv(X, y, n_estimators=27, max_depth=5, seed=42,
@@ -205,35 +202,223 @@ get_ipython().run_cell_magic('time', '', "features = {'X_month_train': X_month_t
 
 # ### CONCATENATE DATA
 
-# In[60]:
+# In[36]:
 
 
 y = target.dep_delayed_15min.values
 print("Classes in dataset:", np.unique(y)) 
 print('Size:', y.shape)
 print("positive objects:", y.sum())
+balance_coef = np.sum(y==0) /  np.sum(y==1)
 
 
-# In[ ]:
+# In[41]:
 
 
-X_month_train', 'X_dom_train', 'X_dow_train', 'X_hour_train', 'X_carrier_train
+# Best feature combination
 
+X = np.hstack([
+    X_month_train,
+    X_dom_train,
+    X_dow_train,
+    X_hour_train,
+    X_minute_train,
+    X_isweekend_train,
+    X_carrier_train,
+#     X_origin_train
+    X_dest_train,
+#     X_route_train
+])
 
-# In[ ]:
-
-
-X = hstack([X_month_train, X_dom_train,
-            X_dow_train, X_] , format='csr')
-
-X_test = hstack([X_tfidf_test, X_hour_test, 
-                 X_dow_test, X_daytime_test, 
-                 X_timespan_test, X_unique_test,
-                 X_intop10_test, X_socnet_test], format='csr')
+X_test = np.hstack([
+    X_month_test,
+    X_dom_test,
+    X_dow_test,
+    X_hour_test,
+    X_minute_test,
+    X_isweekend_test,
+    X_carrier_test,
+#     X_origin_test,
+    X_dest_test,
+#     X_route_test
+])
 
 X.shape, X_test.shape, y.shape
 
 
-# ## XGBoost TRAINING
+# ## XGBoost TUNING
 
 # ### Simple XGBoost
+
+# In[88]:
+
+
+X_train, X_valid, y_train, y_valid = train_test_split(
+        X, y, train_size=0.7, random_state=42)
+skf = StratifiedKFold(n_splits=5, random_state=42)
+
+
+# In[89]:
+
+
+xgb = XGBClassifier(n_estimators=300, max_depth=3, random_state=42, n_jobs=-1)
+
+
+# In[90]:
+
+
+get_ipython().run_cell_magic('time', '', 'xgb.fit(X_train, y_train)\nprint(roc_auc_score(y_valid, xgb.predict_proba(X_valid)[:, 1]))')
+
+
+# In[52]:
+
+
+_cv_score = cross_val_score(xgb, X, y, scoring='roc_auc', cv=skf, n_jobs=-1)
+_cv_score.mean(), _cv_score.std()
+
+
+# ### XGB CV
+
+# In[63]:
+
+
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+
+
+# #### Iteration #1. Model complexity
+
+# In[51]:
+
+
+_xgb_grid_params_iteration1 = {
+    'colsample_bytree': np.linspace(0.4, 1, 5),
+    'gamma': np.linspace(0.5, 1, 5),
+    'max_depth': np.arange(1, 11)
+    'min_child_weight': np.arange(1,11),
+    'reg_alpha': np.logspace(-2, 2, 8),
+    'reg_lambda': np.logspace(-2, 2, 8),
+    'subsample': np.linspace(0.5, 1, 8)
+}
+
+
+# In[68]:
+
+
+get_ipython().run_cell_magic('time', '', "xgb = XGBClassifier(n_estimators=30, \n                    scale_pos_weight=balance_coef,\n                    random_state=42, n_jobs=-1)\n\nxgb_search1 = RandomizedSearchCV(xgb, _xgb_grid_params_iteration1, \n                                 n_iter=1000, cv=skf, scoring='roc_auc', \n                                 random_state=42, n_jobs=-1, verbose=1)\nxgb_search1.fit(X_train, y_train)")
+
+
+# In[57]:
+
+
+xgbest1 = xgb_search1.best_estimator_
+xgb_best_complexity = xgb_search1.best_params_
+xgb_search1.best_score_, xgb_search1.best_params_
+
+
+# In[87]:
+
+
+print(f"""ROC-AUC on the validation data: 
+{roc_auc_score(y_valid, xgbest1.predict_proba(X_valid)[:, 1]):.5f}""")
+
+
+# #### Iteration #2. Model optimization
+
+# In[74]:
+
+
+_xgb_grid_params_iteration2 = {
+    'n_estimators': np.linspace(100, 1000, 10, dtype='int'),
+    'learning_rate': np.arange(0.005, 0.1, 0.005)
+}
+
+
+# In[78]:
+
+
+get_ipython().run_cell_magic('time', '', "\nxgb_search2 = GridSearchCV(xgbest1, _xgb_grid_params_iteration2,\n                                cv=skf, scoring='roc_auc', \n                                n_jobs=-1, verbose=1)\nxgb_search2.fit(X_train, y_train)")
+
+
+# In[76]:
+
+
+xgbest2 = xgb_search2.best_estimator_
+xgb_best_complexity = xgb_search2.best_params_
+xgb_search2.best_score_, xgb_search2.best_params_
+
+
+# In[ ]:
+
+
+print(f"""ROC-AUC on the validation data: 
+{roc_auc_score(y_valid, xgbest2.predict_proba(X_valid)[:, 1]):.5f}""")
+
+
+# ## SUBMIT
+
+# ### Last check
+
+# In[92]:
+
+
+X.shape, X_test.shape, y.shape
+
+
+# In[ ]:
+
+
+final_estimator = xgbest2
+final_estimator
+
+
+# In[ ]:
+
+
+X_train, X_valid, y_train, y_valid = train_test_split(X, y, train_set=0.9, 
+                                                      random_state=42)
+
+_cv_score = cross_val_score(final_estimator, X, y, scoring='roc_auc', cv=skf,
+                            n_jobs=-1)
+
+final_estimator.fit(X_train, y_train)
+_roc_auc = roc_auc_score(y_valid, final_estimator.predic_proba(X_valid)[:, 1])
+
+print(f'CV: {_cv_score:.5f} \n ROC-AUC: {_roc_auc}')
+
+
+# ### Train on the full dataset
+
+# In[ ]:
+
+
+get_ipython().run_cell_magic('time', '', 'final_estimator.fit(X, y)\nfinal_pred = final_estimator.predict_proba(X_test)[: 1]')
+
+
+# ### Write submission
+
+# In[91]:
+
+
+# Function for writing predictions to a file
+def write_to_submission_file(predicted_labels, out_file, 
+                             target='dep_delayed_15min', index_label="id"):
+    
+    predicted_df = pd.DataFrame(
+        predicted_labels,
+        index = np.arange(0, predicted_labels.shape[0]),
+        columns=[target])
+    
+    predicted_df.to_csv(out_file, index_label=index_label)
+
+
+# In[ ]:
+
+
+from datetime import datetime as dt
+import subprocess
+now = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
+label = subprocess.check_output(["git", "describe", "--always"]).strip().decode("utf-8")
+
+### WRITE SUBMISSION
+write_to_submission_file(final_pred, f'../submissions/catboost_submission_at_{now}__githash_{label}.csv')
+
