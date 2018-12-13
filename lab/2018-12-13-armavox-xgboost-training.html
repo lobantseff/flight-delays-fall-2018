@@ -11831,7 +11831,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># pip install watermark</span>
@@ -11853,27 +11853,25 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>The watermark extension is already loaded. To reload it, use:
-  %reload_ext watermark
-CPython 3.7.1
+<pre>CPython 3.7.1
 IPython 7.2.0
 
 numpy 1.15.4
 pandas 0.23.4
 sklearn 0.20.1
-matplotlib 3.0.2
+matplotlib 2.2.2
 statsmodels 0.9.0
 xgboost 0.81
 catboost 0.11.2
 
-compiler   : Clang 4.0.1 (tags/RELEASE_401/final)
-system     : Darwin
-release    : 16.7.0
+compiler   : GCC 7.3.0
+system     : Linux
+release    : 4.14.77-70.59.amzn1.x86_64
 machine    : x86_64
-processor  : i386
+processor  : x86_64
 CPU cores  : 8
 interpreter: 64bit
-Git hash   : 0ffb443328315699e8f94d7f4131f1ea46f19d58
+Git hash   : 685ac00570e3322c446306e2ad82609f344c94a9
 Git repo   : https://github.com/armavox/flight-delays-fall-2018.git
 Git branch : master
 </pre>
@@ -11886,7 +11884,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -11934,7 +11932,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/train.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;idx&#39;</span><span class="p">)</span>
@@ -11951,7 +11949,7 @@ Git branch : master
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[6]:</div>
+<div class="prompt output_prompt">Out[3]:</div>
 
 
 
@@ -12052,7 +12050,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/test.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;idx&#39;</span><span class="p">)</span>
@@ -12069,7 +12067,7 @@ Git branch : master
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[7]:</div>
+<div class="prompt output_prompt">Out[4]:</div>
 
 
 
@@ -12170,7 +12168,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/target.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;idx&#39;</span><span class="p">)</span>
@@ -12187,7 +12185,7 @@ Git branch : master
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[8]:</div>
+<div class="prompt output_prompt">Out[5]:</div>
 
 
 
@@ -12252,7 +12250,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;Route&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s1">&#39;Origin&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">train</span><span class="p">[</span><span class="s1">&#39;Dest&#39;</span><span class="p">]</span>
@@ -12274,7 +12272,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">train</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -12290,7 +12288,7 @@ Git branch : master
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[10]:</div>
+<div class="prompt output_prompt">Out[7]:</div>
 
 
 
@@ -12368,7 +12366,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">ohe</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">handle_unknown</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
@@ -12381,7 +12379,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_month_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">Month</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -12395,7 +12393,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_dom_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">DayofMonth</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -12409,7 +12407,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_dow_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">DayOfWeek</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -12423,7 +12421,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_hour_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">Hour</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -12437,7 +12435,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_minute_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">Minute</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -12451,7 +12449,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_isweekend_train</span> <span class="o">=</span> <span class="n">train</span><span class="o">.</span><span class="n">IsWeekend</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -12465,7 +12463,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_carrier_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">UniqueCarrier</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -12479,7 +12477,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_origin_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">Origin</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -12493,7 +12491,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_dest_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">Dest</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -12507,7 +12505,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_route_train</span> <span class="o">=</span> <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">Route</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
@@ -12529,7 +12527,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">simple_xgb_cv</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
@@ -15707,7 +15705,7 @@ Wall time: 1h 21min 41s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">dep_delayed_15min</span><span class="o">.</span><span class="n">values</span>
@@ -15744,7 +15742,7 @@ positive objects: 19038
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Best feature combination</span>
@@ -15788,7 +15786,7 @@ positive objects: 19038
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[41]:</div>
+<div class="prompt output_prompt">Out[&nbsp;]:</div>
 
 
 
@@ -15821,7 +15819,7 @@ positive objects: 19038
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[88]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
@@ -15836,7 +15834,7 @@ positive objects: 19038
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[89]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb</span> <span class="o">=</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
@@ -15849,10 +15847,11 @@ positive objects: 19038
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[90]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%capture</span> In24
+<span class="o">%%</span><span class="n">time</span>
 <span class="n">xgb</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">xgb</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_valid</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]))</span>
 </pre></div>
@@ -15861,33 +15860,14 @@ positive objects: 19038
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>0.7219444017255943
-CPU times: user 6min 6s, sys: 1.72 s, total: 6min 8s
-Wall time: 6min 10s
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">_cv_score</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">xgb</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">skf</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%capture</span> In25
+<span class="n">_cv_score</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">xgb</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">skf</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">_cv_score</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">_cv_score</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
 </pre></div>
 
@@ -15906,7 +15886,7 @@ Wall time: 6min 10s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[63]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">GridSearchCV</span><span class="p">,</span> <span class="n">RandomizedSearchCV</span>
@@ -15927,7 +15907,7 @@ Wall time: 6min 10s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">_xgb_grid_params_iteration1</span> <span class="o">=</span> <span class="p">{</span>
@@ -15948,10 +15928,11 @@ Wall time: 6min 10s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[68]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%capture</span> In28
+<span class="o">%%</span><span class="n">time</span>
 <span class="n">xgb</span> <span class="o">=</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> 
                     <span class="n">scale_pos_weight</span><span class="o">=</span><span class="n">balance_coef</span><span class="p">,</span>
                     <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
@@ -15966,111 +15947,14 @@ Wall time: 6min 10s
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Fitting 5 folds for each of 500 candidates, totalling 2500 fits
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>[Parallel(n_jobs=-1)]: Using backend LokyBackend with 8 concurrent workers.
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">KeyboardInterrupt</span>                      Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;timed exec&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-
-<span class="ansi-green-fg">~/miniconda3/envs/kaggle/lib/python3.7/site-packages/sklearn/model_selection/_search.py</span> in <span class="ansi-cyan-fg">fit</span><span class="ansi-blue-fg">(self, X, y, groups, **fit_params)</span>
-<span class="ansi-green-intense-fg ansi-bold">    720</span>                 <span class="ansi-green-fg">return</span> results_container<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">    721</span> 
-<span class="ansi-green-fg">--&gt; 722</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>_run_search<span class="ansi-blue-fg">(</span>evaluate_candidates<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    723</span> 
-<span class="ansi-green-intense-fg ansi-bold">    724</span>         results <span class="ansi-blue-fg">=</span> results_container<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span>
-
-<span class="ansi-green-fg">~/miniconda3/envs/kaggle/lib/python3.7/site-packages/sklearn/model_selection/_search.py</span> in <span class="ansi-cyan-fg">_run_search</span><span class="ansi-blue-fg">(self, evaluate_candidates)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1513</span>         evaluate_candidates(ParameterSampler(
-<span class="ansi-green-intense-fg ansi-bold">   1514</span>             self<span class="ansi-blue-fg">.</span>param_distributions<span class="ansi-blue-fg">,</span> self<span class="ansi-blue-fg">.</span>n_iter<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-fg">-&gt; 1515</span><span class="ansi-red-fg">             random_state=self.random_state))
-</span>
-<span class="ansi-green-fg">~/miniconda3/envs/kaggle/lib/python3.7/site-packages/sklearn/model_selection/_search.py</span> in <span class="ansi-cyan-fg">evaluate_candidates</span><span class="ansi-blue-fg">(candidate_params)</span>
-<span class="ansi-green-intense-fg ansi-bold">    709</span>                                <span class="ansi-green-fg">for</span> parameters<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">(</span>train<span class="ansi-blue-fg">,</span> test<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    710</span>                                in product(candidate_params,
-<span class="ansi-green-fg">--&gt; 711</span><span class="ansi-red-fg">                                           cv.split(X, y, groups)))
-</span><span class="ansi-green-intense-fg ansi-bold">    712</span> 
-<span class="ansi-green-intense-fg ansi-bold">    713</span>                 all_candidate_params<span class="ansi-blue-fg">.</span>extend<span class="ansi-blue-fg">(</span>candidate_params<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/miniconda3/envs/kaggle/lib/python3.7/site-packages/sklearn/externals/joblib/parallel.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, iterable)</span>
-<span class="ansi-green-intense-fg ansi-bold">    928</span> 
-<span class="ansi-green-intense-fg ansi-bold">    929</span>             <span class="ansi-green-fg">with</span> self<span class="ansi-blue-fg">.</span>_backend<span class="ansi-blue-fg">.</span>retrieval_context<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 930</span><span class="ansi-red-fg">                 </span>self<span class="ansi-blue-fg">.</span>retrieve<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    931</span>             <span class="ansi-red-fg"># Make sure that we get a last message telling us we are done</span>
-<span class="ansi-green-intense-fg ansi-bold">    932</span>             elapsed_time <span class="ansi-blue-fg">=</span> time<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-</span> self<span class="ansi-blue-fg">.</span>_start_time
-
-<span class="ansi-green-fg">~/miniconda3/envs/kaggle/lib/python3.7/site-packages/sklearn/externals/joblib/parallel.py</span> in <span class="ansi-cyan-fg">retrieve</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    831</span>             <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    832</span>                 <span class="ansi-green-fg">if</span> getattr<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_backend<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;supports_timeout&#39;</span><span class="ansi-blue-fg">,</span> <span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 833</span><span class="ansi-red-fg">                     </span>self<span class="ansi-blue-fg">.</span>_output<span class="ansi-blue-fg">.</span>extend<span class="ansi-blue-fg">(</span>job<span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span>timeout<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>timeout<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    834</span>                 <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    835</span>                     self<span class="ansi-blue-fg">.</span>_output<span class="ansi-blue-fg">.</span>extend<span class="ansi-blue-fg">(</span>job<span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/miniconda3/envs/kaggle/lib/python3.7/site-packages/sklearn/externals/joblib/_parallel_backends.py</span> in <span class="ansi-cyan-fg">wrap_future_result</span><span class="ansi-blue-fg">(future, timeout)</span>
-<span class="ansi-green-intense-fg ansi-bold">    519</span>         AsyncResults.get from multiprocessing.&#34;&#34;&#34;
-<span class="ansi-green-intense-fg ansi-bold">    520</span>         <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 521</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> future<span class="ansi-blue-fg">.</span>result<span class="ansi-blue-fg">(</span>timeout<span class="ansi-blue-fg">=</span>timeout<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    522</span>         <span class="ansi-green-fg">except</span> LokyTimeoutError<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    523</span>             <span class="ansi-green-fg">raise</span> TimeoutError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/miniconda3/envs/kaggle/lib/python3.7/concurrent/futures/_base.py</span> in <span class="ansi-cyan-fg">result</span><span class="ansi-blue-fg">(self, timeout)</span>
-<span class="ansi-green-intense-fg ansi-bold">    425</span>                 <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>__get_result<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    426</span> 
-<span class="ansi-green-fg">--&gt; 427</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>_condition<span class="ansi-blue-fg">.</span>wait<span class="ansi-blue-fg">(</span>timeout<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    428</span> 
-<span class="ansi-green-intense-fg ansi-bold">    429</span>             <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>_state <span class="ansi-green-fg">in</span> <span class="ansi-blue-fg">[</span>CANCELLED<span class="ansi-blue-fg">,</span> CANCELLED_AND_NOTIFIED<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">~/miniconda3/envs/kaggle/lib/python3.7/threading.py</span> in <span class="ansi-cyan-fg">wait</span><span class="ansi-blue-fg">(self, timeout)</span>
-<span class="ansi-green-intense-fg ansi-bold">    294</span>         <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>    <span class="ansi-red-fg"># restore state no matter what (e.g., KeyboardInterrupt)</span>
-<span class="ansi-green-intense-fg ansi-bold">    295</span>             <span class="ansi-green-fg">if</span> timeout <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 296</span><span class="ansi-red-fg">                 </span>waiter<span class="ansi-blue-fg">.</span>acquire<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    297</span>                 gotit <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">True</span>
-<span class="ansi-green-intense-fg ansi-bold">    298</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">KeyboardInterrupt</span>: </pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[57]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgbest1</span> <span class="o">=</span> <span class="n">xgb_search1</span><span class="o">.</span><span class="n">best_estimator_</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%capture</span> In29
+<span class="n">xgbest1</span> <span class="o">=</span> <span class="n">xgb_search1</span><span class="o">.</span><span class="n">best_estimator_</span>
 <span class="n">xgb_best_complexity</span> <span class="o">=</span> <span class="n">xgb_search1</span><span class="o">.</span><span class="n">best_params_</span>
 <span class="n">xgb_search1</span><span class="o">.</span><span class="n">best_score_</span><span class="p">,</span> <span class="n">xgb_search1</span><span class="o">.</span><span class="n">best_params_</span>
 </pre></div>
@@ -16079,60 +15963,18 @@ Wall time: 6min 10s
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">AttributeError</span>                         Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-57-7bd1aa66d2c1&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>xgbest <span class="ansi-blue-fg">=</span> xgb_search<span class="ansi-blue-fg">.</span>best_estimator_
-<span class="ansi-green-intense-fg ansi-bold">      2</span> xgb_search<span class="ansi-blue-fg">.</span>best_score_<span class="ansi-blue-fg">,</span> xgb_search<span class="ansi-blue-fg">.</span>best_params_
-
-<span class="ansi-red-fg">AttributeError</span>: &#39;RandomizedSearchCV&#39; object has no attribute &#39;best_estimator_&#39;</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[87]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&quot;&quot;ROC-AUC on the validation data: </span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%capture</span> In30
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&quot;&quot;ROC-AUC on the validation data: </span>
 <span class="s2">{roc_auc_score(y_valid, xgbest1.predict_proba(X_valid)[:, 1]):.5f}&quot;&quot;&quot;</span><span class="p">)</span>
 </pre></div>
 
 </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>ROC-AUC on the validation data: 
-0.58696
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -16147,7 +15989,7 @@ Wall time: 6min 10s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[74]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">_xgb_grid_params_iteration2</span> <span class="o">=</span> <span class="p">{</span>
@@ -16163,10 +16005,11 @@ Wall time: 6min 10s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[78]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%capture</span> In32
+<span class="o">%%</span><span class="n">time</span>
 
 <span class="n">xgb_search2</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">xgbest1</span><span class="p">,</span> <span class="n">_xgb_grid_params_iteration2</span><span class="p">,</span>
                                 <span class="n">cv</span><span class="o">=</span><span class="n">skf</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">,</span> 
@@ -16178,71 +16021,19 @@ Wall time: 6min 10s
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                              Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-78-b54c3db80b35&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span>                     scale_pos_weight<span class="ansi-blue-fg">=</span>balance_coef<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span>                     random_state<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">42</span><span class="ansi-blue-fg">,</span> n_jobs<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span>
-<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg">                     **xgb_best_complexity)
-</span><span class="ansi-green-intense-fg ansi-bold">      6</span> 
-<span class="ansi-green-intense-fg ansi-bold">      7</span> <span class="ansi-red-fg"># xgb_search = RandomizedSearchCV(xgb, _xgb_grid_params_iteration1, n_iter=100,</span>
-
-<span class="ansi-red-fg">NameError</span>: name &#39;xgb_best_complexity&#39; is not defined</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[76]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgbest2</span> <span class="o">=</span> <span class="n">xgb_search2</span><span class="o">.</span><span class="n">best_estimator_</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%capture</span> In33
+<span class="n">xgbest2</span> <span class="o">=</span> <span class="n">xgb_search2</span><span class="o">.</span><span class="n">best_estimator_</span>
 <span class="n">xgb_best_complexity</span> <span class="o">=</span> <span class="n">xgb_search2</span><span class="o">.</span><span class="n">best_params_</span>
 <span class="n">xgb_search2</span><span class="o">.</span><span class="n">best_score_</span><span class="p">,</span> <span class="n">xgb_search2</span><span class="o">.</span><span class="n">best_params_</span>
 </pre></div>
 
 </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[76]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>XGBClassifier(base_score=0.5, booster=&#39;gbtree&#39;, colsample_bylevel=1,
-       colsample_bytree=1, gamma=0, learning_rate=0.1, max_delta_step=0,
-       max_depth=3, min_child_weight=1, missing=None, n_estimators=99,
-       n_jobs=-1, nthread=None, objective=&#39;binary:logistic&#39;,
-       random_state=42, reg_alpha=0, reg_lambda=1,
-       scale_pos_weight=4.252337430402354, seed=None, silent=True,
-       subsample=1)</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -16252,7 +16043,8 @@ Wall time: 6min 10s
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&quot;&quot;ROC-AUC on the validation data: </span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%capture</span> In34
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&quot;&quot;ROC-AUC on the validation data: </span>
 <span class="s2">{roc_auc_score(y_valid, xgbest2.predict_proba(X_valid)[:, 1]):.5f}&quot;&quot;&quot;</span><span class="p">)</span>
 </pre></div>
 
@@ -16279,33 +16071,13 @@ Wall time: 6min 10s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[92]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 
 </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[92]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>((99994, 447), (100000, 447), (99994,))</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -16329,7 +16101,8 @@ Wall time: 6min 10s
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">train_set</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%capture</span> In37
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">train_set</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> 
                                                       <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="n">_cv_score</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">final_estimator</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">skf</span><span class="p">,</span>
@@ -16359,7 +16132,8 @@ Wall time: 6min 10s
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%capture</span> In38
+<span class="o">%%</span><span class="n">time</span>
 <span class="n">final_estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="n">final_pred</span> <span class="o">=</span> <span class="n">final_estimator</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:</span> <span class="mi">1</span><span class="p">]</span>
 </pre></div>
@@ -16379,7 +16153,7 @@ Wall time: 6min 10s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[91]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Function for writing predictions to a file</span>
@@ -16410,7 +16184,7 @@ Wall time: 6min 10s
 <span class="n">label</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">([</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;describe&quot;</span><span class="p">,</span> <span class="s2">&quot;--always&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
 
 <span class="c1">### WRITE SUBMISSION</span>
-<span class="n">write_to_submission_file</span><span class="p">(</span><span class="n">final_pred</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;../submissions/catboost_submission_at_</span><span class="si">{now}</span><span class="s1">__githash_</span><span class="si">{label}</span><span class="s1">.csv&#39;</span><span class="p">)</span>
+<span class="n">write_to_submission_file</span><span class="p">(</span><span class="n">final_pred</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;../submissions/xgb_submission_at_</span><span class="si">{now}</span><span class="s1">__githash_</span><span class="si">{label}</span><span class="s1">.csv&#39;</span><span class="p">)</span>
 </pre></div>
 
 </div>

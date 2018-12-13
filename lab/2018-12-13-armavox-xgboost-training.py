@@ -18,7 +18,7 @@ get_ipython().run_cell_magic('capture', 'output  ', '# pip install nbformat\n# e
 
 # __Notebook environment__
 
-# In[3]:
+# In[1]:
 
 
 # pip install watermark
@@ -26,7 +26,7 @@ get_ipython().run_line_magic('load_ext', 'watermark')
 get_ipython().run_line_magic('watermark', '-v -m -r -b -g -p numpy,pandas,sklearn,matplotlib,statsmodels,xgboost,catboost')
 
 
-# In[5]:
+# In[2]:
 
 
 import numpy as np
@@ -55,21 +55,21 @@ warnings.filterwarnings('ignore')
 
 # ### IMPORT DATA
 
-# In[6]:
+# In[3]:
 
 
 train = pd.read_csv('../data/train.csv', index_col='idx')
 train.head(3)
 
 
-# In[7]:
+# In[4]:
 
 
 test = pd.read_csv('../data/test.csv', index_col='idx')
 test.head(3)
 
 
-# In[8]:
+# In[5]:
 
 
 target = pd.read_csv('../data/target.csv', index_col='idx')
@@ -78,7 +78,7 @@ target.head(3)
 
 # __Origin_Dest interaction: ``Route`` feature__
 
-# In[9]:
+# In[6]:
 
 
 train['Route'] = train['Origin'] + '_' + train['Dest']
@@ -87,82 +87,82 @@ test['Route'] = test['Origin'] + '_' + test['Dest']
 
 # ### FEATURES CONVERSION
 
-# In[10]:
+# In[7]:
 
 
 train.head(1)
 
 
-# In[11]:
+# In[8]:
 
 
 ohe = OneHotEncoder(categories='auto', sparse=False, handle_unknown='ignore')
 
 
-# In[12]:
+# In[9]:
 
 
 X_month_train = ohe.fit_transform(train.Month.values.reshape(-1, 1))
 X_month_test = ohe.transform(test.Month.values.reshape(-1, 1))
 
 
-# In[13]:
+# In[10]:
 
 
 X_dom_train = ohe.fit_transform(train.DayofMonth.values.reshape(-1, 1))
 X_dom_test = ohe.transform(test.DayofMonth.values.reshape(-1, 1))
 
 
-# In[14]:
+# In[11]:
 
 
 X_dow_train = ohe.fit_transform(train.DayOfWeek.values.reshape(-1, 1))
 X_dow_test = ohe.transform(test.DayOfWeek.values.reshape(-1, 1))
 
 
-# In[15]:
+# In[12]:
 
 
 X_hour_train = ohe.fit_transform(train.Hour.values.reshape(-1, 1))
 X_hour_test = ohe.transform(test.Hour.values.reshape(-1, 1))
 
 
-# In[16]:
+# In[13]:
 
 
 X_minute_train = ohe.fit_transform(train.Minute.values.reshape(-1, 1))
 X_minute_test = ohe.transform(test.Minute.values.reshape(-1, 1))
 
 
-# In[17]:
+# In[14]:
 
 
 X_isweekend_train = train.IsWeekend.values.reshape(-1, 1)
 X_isweekend_test = test.IsWeekend.values.reshape(-1, 1)
 
 
-# In[18]:
+# In[15]:
 
 
 X_carrier_train = ohe.fit_transform(train.UniqueCarrier.values.reshape(-1, 1))
 X_carrier_test = ohe.transform(test.UniqueCarrier.values.reshape(-1, 1))
 
 
-# In[19]:
+# In[16]:
 
 
 X_origin_train = ohe.fit_transform(train.Origin.values.reshape(-1, 1))
 X_origin_test = ohe.transform(test.Origin.values.reshape(-1, 1))
 
 
-# In[20]:
+# In[17]:
 
 
 X_dest_train = ohe.fit_transform(train.Dest.values.reshape(-1, 1))
 X_dest_test = ohe.transform(test.Dest.values.reshape(-1, 1))
 
 
-# In[21]:
+# In[18]:
 
 
 X_route_train = ohe.fit_transform(train.Route.values.reshape(-1, 1))
@@ -171,7 +171,7 @@ X_route_test = ohe.fit_transform(test.Route.values.reshape(-1, 1))
 
 # ### SELECT FEATURES
 
-# In[22]:
+# In[ ]:
 
 
 def simple_xgb_cv(X, y, n_estimators=27, max_depth=5, seed=42,
@@ -202,7 +202,7 @@ get_ipython().run_cell_magic('time', '', "features = {'X_month_train': X_month_t
 
 # ### CONCATENATE DATA
 
-# In[36]:
+# In[ ]:
 
 
 y = target.dep_delayed_15min.values
@@ -212,7 +212,7 @@ print("positive objects:", y.sum())
 balance_coef = np.sum(y==0) /  np.sum(y==1)
 
 
-# In[41]:
+# In[ ]:
 
 
 # Best feature combination
@@ -250,7 +250,7 @@ X.shape, X_test.shape, y.shape
 
 # ### Simple XGBoost
 
-# In[88]:
+# In[ ]:
 
 
 X_train, X_valid, y_train, y_valid = train_test_split(
@@ -258,28 +258,27 @@ X_train, X_valid, y_train, y_valid = train_test_split(
 skf = StratifiedKFold(n_splits=5, random_state=42)
 
 
-# In[89]:
+# In[ ]:
 
 
 xgb = XGBClassifier(n_estimators=300, max_depth=3, random_state=42, n_jobs=-1)
 
 
-# In[90]:
+# In[ ]:
 
 
-get_ipython().run_cell_magic('time', '', 'xgb.fit(X_train, y_train)\nprint(roc_auc_score(y_valid, xgb.predict_proba(X_valid)[:, 1]))')
+get_ipython().run_cell_magic('capture', 'In24', '%%time\nxgb.fit(X_train, y_train)\nprint(roc_auc_score(y_valid, xgb.predict_proba(X_valid)[:, 1]))')
 
 
-# In[52]:
+# In[ ]:
 
 
-_cv_score = cross_val_score(xgb, X, y, scoring='roc_auc', cv=skf, n_jobs=-1)
-_cv_score.mean(), _cv_score.std()
+get_ipython().run_cell_magic('capture', 'In25', "_cv_score = cross_val_score(xgb, X, y, scoring='roc_auc', cv=skf, n_jobs=-1)\n_cv_score.mean(), _cv_score.std()")
 
 
 # ### XGB CV
 
-# In[63]:
+# In[ ]:
 
 
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
@@ -287,7 +286,7 @@ from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 
 # #### Iteration #1. Model complexity
 
-# In[51]:
+# In[ ]:
 
 
 _xgb_grid_params_iteration1 = {
@@ -301,30 +300,27 @@ _xgb_grid_params_iteration1 = {
 }
 
 
-# In[68]:
+# In[ ]:
 
 
-get_ipython().run_cell_magic('time', '', "xgb = XGBClassifier(n_estimators=30, \n                    scale_pos_weight=balance_coef,\n                    random_state=42, n_jobs=-1)\n\nxgb_search1 = RandomizedSearchCV(xgb, _xgb_grid_params_iteration1, \n                                 n_iter=1000, cv=skf, scoring='roc_auc', \n                                 random_state=42, n_jobs=-1, verbose=1)\nxgb_search1.fit(X_train, y_train)")
+get_ipython().run_cell_magic('capture', 'In28', "%%time\nxgb = XGBClassifier(n_estimators=30, \n                    scale_pos_weight=balance_coef,\n                    random_state=42, n_jobs=-1)\n\nxgb_search1 = RandomizedSearchCV(xgb, _xgb_grid_params_iteration1, \n                                 n_iter=1000, cv=skf, scoring='roc_auc', \n                                 random_state=42, n_jobs=-1, verbose=1)\nxgb_search1.fit(X_train, y_train)")
 
 
-# In[57]:
+# In[ ]:
 
 
-xgbest1 = xgb_search1.best_estimator_
-xgb_best_complexity = xgb_search1.best_params_
-xgb_search1.best_score_, xgb_search1.best_params_
+get_ipython().run_cell_magic('capture', 'In29', 'xgbest1 = xgb_search1.best_estimator_\nxgb_best_complexity = xgb_search1.best_params_\nxgb_search1.best_score_, xgb_search1.best_params_')
 
 
-# In[87]:
+# In[ ]:
 
 
-print(f"""ROC-AUC on the validation data: 
-{roc_auc_score(y_valid, xgbest1.predict_proba(X_valid)[:, 1]):.5f}""")
+get_ipython().run_cell_magic('capture', 'In30', 'print(f"""ROC-AUC on the validation data: \n{roc_auc_score(y_valid, xgbest1.predict_proba(X_valid)[:, 1]):.5f}""")')
 
 
 # #### Iteration #2. Model optimization
 
-# In[74]:
+# In[ ]:
 
 
 _xgb_grid_params_iteration2 = {
@@ -333,32 +329,29 @@ _xgb_grid_params_iteration2 = {
 }
 
 
-# In[78]:
+# In[ ]:
 
 
-get_ipython().run_cell_magic('time', '', "\nxgb_search2 = GridSearchCV(xgbest1, _xgb_grid_params_iteration2,\n                                cv=skf, scoring='roc_auc', \n                                n_jobs=-1, verbose=1)\nxgb_search2.fit(X_train, y_train)")
-
-
-# In[76]:
-
-
-xgbest2 = xgb_search2.best_estimator_
-xgb_best_complexity = xgb_search2.best_params_
-xgb_search2.best_score_, xgb_search2.best_params_
+get_ipython().run_cell_magic('capture', 'In32', "%%time\n\nxgb_search2 = GridSearchCV(xgbest1, _xgb_grid_params_iteration2,\n                                cv=skf, scoring='roc_auc', \n                                n_jobs=-1, verbose=1)\nxgb_search2.fit(X_train, y_train)")
 
 
 # In[ ]:
 
 
-print(f"""ROC-AUC on the validation data: 
-{roc_auc_score(y_valid, xgbest2.predict_proba(X_valid)[:, 1]):.5f}""")
+get_ipython().run_cell_magic('capture', 'In33', 'xgbest2 = xgb_search2.best_estimator_\nxgb_best_complexity = xgb_search2.best_params_\nxgb_search2.best_score_, xgb_search2.best_params_')
+
+
+# In[ ]:
+
+
+get_ipython().run_cell_magic('capture', 'In34', 'print(f"""ROC-AUC on the validation data: \n{roc_auc_score(y_valid, xgbest2.predict_proba(X_valid)[:, 1]):.5f}""")')
 
 
 # ## SUBMIT
 
 # ### Last check
 
-# In[92]:
+# In[ ]:
 
 
 X.shape, X_test.shape, y.shape
@@ -374,16 +367,7 @@ final_estimator
 # In[ ]:
 
 
-X_train, X_valid, y_train, y_valid = train_test_split(X, y, train_set=0.9, 
-                                                      random_state=42)
-
-_cv_score = cross_val_score(final_estimator, X, y, scoring='roc_auc', cv=skf,
-                            n_jobs=-1)
-
-final_estimator.fit(X_train, y_train)
-_roc_auc = roc_auc_score(y_valid, final_estimator.predic_proba(X_valid)[:, 1])
-
-print(f'CV: {_cv_score:.5f} \n ROC-AUC: {_roc_auc}')
+get_ipython().run_cell_magic('capture', 'In37', "X_train, X_valid, y_train, y_valid = train_test_split(X, y, train_set=0.9, \n                                                      random_state=42)\n\n_cv_score = cross_val_score(final_estimator, X, y, scoring='roc_auc', cv=skf,\n                            n_jobs=-1)\n\nfinal_estimator.fit(X_train, y_train)\n_roc_auc = roc_auc_score(y_valid, final_estimator.predic_proba(X_valid)[:, 1])\n\nprint(f'CV: {_cv_score:.5f} \\n ROC-AUC: {_roc_auc}')")
 
 
 # ### Train on the full dataset
@@ -391,12 +375,12 @@ print(f'CV: {_cv_score:.5f} \n ROC-AUC: {_roc_auc}')
 # In[ ]:
 
 
-get_ipython().run_cell_magic('time', '', 'final_estimator.fit(X, y)\nfinal_pred = final_estimator.predict_proba(X_test)[: 1]')
+get_ipython().run_cell_magic('capture', 'In38', '%%time\nfinal_estimator.fit(X, y)\nfinal_pred = final_estimator.predict_proba(X_test)[: 1]')
 
 
 # ### Write submission
 
-# In[91]:
+# In[ ]:
 
 
 # Function for writing predictions to a file
@@ -420,5 +404,5 @@ now = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
 label = subprocess.check_output(["git", "describe", "--always"]).strip().decode("utf-8")
 
 ### WRITE SUBMISSION
-write_to_submission_file(final_pred, f'../submissions/catboost_submission_at_{now}__githash_{label}.csv')
+write_to_submission_file(final_pred, f'../submissions/xgb_submission_at_{now}__githash_{label}.csv')
 
