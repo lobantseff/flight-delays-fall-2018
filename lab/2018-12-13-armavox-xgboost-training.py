@@ -197,7 +197,7 @@ def simple_xgb_cv(X, y, n_estimators=27, max_depth=5, seed=42,
     return round(roc_auc, 5), round(cv_score.mean(), 5)
 
 
-# In[ ]:
+# In[107]:
 
 
 get_ipython().run_cell_magic('time', '', "features = {'X_month_train': X_month_train, \n            'X_dom_train': X_dom_train, \n            'X_dow_train': X_dow_train, \n            'X_hour_train': X_hour_train, \n            'X_minute_train': X_minute_train,\n            'X_isweekend_train': X_isweekend_train,\n            'X_carrier_train': X_carrier_train,\n            'X_origin_train': X_origin_train,\n            'X_dest_train': X_dest_train,\n            'X_route_train': X_route_train}\n\ndef select_best_feature_comb(features_dict):\n    from scipy.sparse import hstack, csr_matrix, isspmatrix_csr\n    \n    results_dict = {}\n    for l in range(1, len(features)+1):\n\n        list_of_keys = [list(comb) for comb in \n                        itertools.combinations(features.keys(), l)]\n        list_of_combs = [list(comb) for comb in \n                         itertools.combinations(features.values(), l)]\n\n        for keys, comb in zip(list_of_keys, list_of_combs):\n            print('Train on:', keys)\n            \n            is_csr = [isspmatrix_csr(x) for x in comb]\n            if any(is_csr):\n                X_con = hstack(comb, format='csr')\n            else:\n                comb[0] = csr_matrix(comb[0])\n                X_con = hstack(comb, format='csr')\n                \n            result = simple_xgb_cv(X_con, y)\n            results_dict[', '.join(keys)] = result\n            print(f'CV: {result[1]}, OOF: {result[0]}', '\\n')\n            \n    return results_dict\n\nselect_best_feature_comb(features)")

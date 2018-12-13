@@ -11884,7 +11884,7 @@ Git branch : master
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -16201,6 +16201,369 @@ Wall time: 1min 35s
 </pre></div>
 
 </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../submissions/catboost_submission_at_2018-12-13_00-13-17__githash_2a09165.csv&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[2]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>dep_delayed_15min</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>0.029344</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>0.058340</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>0.072026</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>0.470186</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>0.497049</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>6</td>
+      <td>0.163377</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>7</td>
+      <td>0.049811</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>8</td>
+      <td>0.400455</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>9</td>
+      <td>0.278116</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>10</td>
+      <td>0.211582</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>11</td>
+      <td>0.427835</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>12</td>
+      <td>0.514147</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>13</td>
+      <td>0.161430</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>14</td>
+      <td>0.119702</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>15</td>
+      <td>0.077999</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>16</td>
+      <td>0.276716</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>17</td>
+      <td>0.111579</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>18</td>
+      <td>0.346336</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>19</td>
+      <td>0.562635</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>20</td>
+      <td>0.020669</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>21</td>
+      <td>0.229934</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>22</td>
+      <td>0.069047</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>23</td>
+      <td>0.414098</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>24</td>
+      <td>0.224298</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>25</td>
+      <td>0.316083</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>26</td>
+      <td>0.521854</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>27</td>
+      <td>0.042895</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>28</td>
+      <td>0.088310</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>29</td>
+      <td>0.420378</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>30</td>
+      <td>0.207438</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>99970</th>
+      <td>99971</td>
+      <td>0.309811</td>
+    </tr>
+    <tr>
+      <th>99971</th>
+      <td>99972</td>
+      <td>0.179083</td>
+    </tr>
+    <tr>
+      <th>99972</th>
+      <td>99973</td>
+      <td>0.044889</td>
+    </tr>
+    <tr>
+      <th>99973</th>
+      <td>99974</td>
+      <td>0.010946</td>
+    </tr>
+    <tr>
+      <th>99974</th>
+      <td>99975</td>
+      <td>0.293767</td>
+    </tr>
+    <tr>
+      <th>99975</th>
+      <td>99976</td>
+      <td>0.034528</td>
+    </tr>
+    <tr>
+      <th>99976</th>
+      <td>99977</td>
+      <td>0.137613</td>
+    </tr>
+    <tr>
+      <th>99977</th>
+      <td>99978</td>
+      <td>0.179346</td>
+    </tr>
+    <tr>
+      <th>99978</th>
+      <td>99979</td>
+      <td>0.852490</td>
+    </tr>
+    <tr>
+      <th>99979</th>
+      <td>99980</td>
+      <td>0.057238</td>
+    </tr>
+    <tr>
+      <th>99980</th>
+      <td>99981</td>
+      <td>0.119740</td>
+    </tr>
+    <tr>
+      <th>99981</th>
+      <td>99982</td>
+      <td>0.335799</td>
+    </tr>
+    <tr>
+      <th>99982</th>
+      <td>99983</td>
+      <td>0.031677</td>
+    </tr>
+    <tr>
+      <th>99983</th>
+      <td>99984</td>
+      <td>0.551774</td>
+    </tr>
+    <tr>
+      <th>99984</th>
+      <td>99985</td>
+      <td>0.433157</td>
+    </tr>
+    <tr>
+      <th>99985</th>
+      <td>99986</td>
+      <td>0.220372</td>
+    </tr>
+    <tr>
+      <th>99986</th>
+      <td>99987</td>
+      <td>0.311478</td>
+    </tr>
+    <tr>
+      <th>99987</th>
+      <td>99988</td>
+      <td>0.227932</td>
+    </tr>
+    <tr>
+      <th>99988</th>
+      <td>99989</td>
+      <td>0.049623</td>
+    </tr>
+    <tr>
+      <th>99989</th>
+      <td>99990</td>
+      <td>0.429961</td>
+    </tr>
+    <tr>
+      <th>99990</th>
+      <td>99991</td>
+      <td>0.408154</td>
+    </tr>
+    <tr>
+      <th>99991</th>
+      <td>99992</td>
+      <td>0.155982</td>
+    </tr>
+    <tr>
+      <th>99992</th>
+      <td>99993</td>
+      <td>0.019779</td>
+    </tr>
+    <tr>
+      <th>99993</th>
+      <td>99994</td>
+      <td>0.316319</td>
+    </tr>
+    <tr>
+      <th>99994</th>
+      <td>99995</td>
+      <td>0.480410</td>
+    </tr>
+    <tr>
+      <th>99995</th>
+      <td>99996</td>
+      <td>0.126361</td>
+    </tr>
+    <tr>
+      <th>99996</th>
+      <td>99997</td>
+      <td>0.174842</td>
+    </tr>
+    <tr>
+      <th>99997</th>
+      <td>99998</td>
+      <td>0.459788</td>
+    </tr>
+    <tr>
+      <th>99998</th>
+      <td>99999</td>
+      <td>0.151094</td>
+    </tr>
+    <tr>
+      <th>99999</th>
+      <td>100000</td>
+      <td>0.115074</td>
+    </tr>
+  </tbody>
+</table>
+<p>100000 rows × 2 columns</p>
+</div>
+</div>
+
+</div>
+
 </div>
 </div>
 

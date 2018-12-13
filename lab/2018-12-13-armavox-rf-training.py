@@ -29,7 +29,7 @@ get_ipython().run_line_magic('load_ext', 'watermark')
 get_ipython().run_line_magic('watermark', '-v -m -r -b -g -p numpy,pandas,sklearn,matplotlib,statsmodels,xgboost,catboost')
 
 
-# In[22]:
+# In[1]:
 
 
 import numpy as np
@@ -363,4 +363,10 @@ pd.Series(final_pred,
 pd.Series(final_pred, 
           name='dep_delayed_15min').to_csv('xgb_2feat.csv', 
                                            index_label='id', header=True)
+
+
+# In[2]:
+
+
+pd.read_csv('../submissions/catboost_submission_at_2018-12-13_00-13-17__githash_2a09165.csv')
 
