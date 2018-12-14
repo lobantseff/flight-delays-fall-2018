@@ -205,7 +205,7 @@ get_ipython().run_cell_magic('time', '', "features = {'X_month_train': X_month_t
 
 # ### CONCATENATE DATA
 
-# In[13]:
+# In[20]:
 
 
 y = target.dep_delayed_15min.values
@@ -274,21 +274,28 @@ roc_auc_score(y_valid, rf.predict_proba(X_valid)[:,1])
 
 # ### Simple CatBoost
 
-# In[7]:
+# __Useful materials__:
+# - [Quick start](https://tech.yandex.com/catboost/doc/dg/concepts/python-quickstart-docpage/)
+# - [Tuning parameters](https://tech.yandex.com/catboost/doc/dg/concepts/parameter-tuning-docpage/)
+# - [Classification tutorial](https://github.com/catboost/tutorials/blob/master/classification/classification_tutorial.ipynb)
+# - [Objectives and metrics](https://tech.yandex.com/catboost/doc/dg/concepts/loss-functions-docpage/)
+# 
+
+# In[22]:
 
 
 from catboost import CatBoostClassifier, Pool
 from catboost import cv
 
 
-# In[8]:
+# In[23]:
 
 
 cat_features_idx = np.where((train.dtypes == 'object') | (train.dtypes == 'int64'))[0].tolist()
 cat_features_idx
 
 
-# In[9]:
+# In[24]:
 
 
 X_train, X_valid, y_train, y_valid = train_test_split(
@@ -321,7 +328,7 @@ get_ipython().run_cell_magic('time', '', "pool = Pool(train, target, cat_feature
 
 # ### Catboost search
 
-# In[49]:
+# In[33]:
 
 
 X_train, X_valid, y_train, y_valid = train_test_split(
@@ -330,94 +337,58 @@ train_pool = Pool(X_train, y_train, cat_features=cat_features_idx)
 eval_pool = Pool(X_valid, y_valid, cat_features=cat_features_idx)
 
 
-# In[ ]:
-
-
-cat_search_params = {
-    'depth' : np.arange(1,17),
-    'l2_leaf_reg' : np.linspace(1, 5, 9),
-#     'rsm': np.linspace(0.5, 1, 3),
-    }
-
-
-# In[57]:
+# In[39]:
 
 
 cat_params = {
     'iterations' : 1200,
-    'learning_rate' : 0.05,
+    'learning_rate' : 0.03,
     'depth' : 10,
     'l2_leaf_reg' : 10,
     'loss_function' : 'Logloss',
     'border_count' : 254,
     'od_type': 'IncToDec',
-    'od_pval' : 1e-5,
+    'od_pval' : 1e-2,
 #     'early_stopping_rounds' : 10,
     'random_seed' : 42,
-    'use_best_model' : True,
+#     'use_best_model' : True,
     'verbose': False,
     'scale_pos_weight' : balance_coef,
     'random_strength' : 1,
     'custom_metric' : 'AUC',
     'eval_metric' : 'AUC',
     'boosting_type' : 'Ordered',
-#     'bagging_temperature' : 3,
-#     'subsample' : 0.66,
-    'cat_features' : cat_features_idx ,
-    'save_snapshot': True,
-    'snapshot_file': 'depth_16'
+    'bagging_temperature' : 1
 }
 
 cat = CatBoostClassifier(**cat_params)
 
 
-# In[ ]:
+# In[36]:
 
 
+get_ipython().system('rm catboost_info/onemore.bkp')
 cat.fit(train_pool, use_best_model=True, eval_set=eval_pool, plot=True,
-       save_snapshot=True, snapshot_file='finalfinal', snapshot_interval=60)
+       save_snapshot=True, snapshot_file='onemore.bkp', snapshot_interval=60)
 
 
-# In[ ]:
+# In[37]:
 
 
 roc_auc_score(y_valid, 
               cat.predict_proba(X_valid)[:, 1])
 
 
-# In[ ]:
-
-
-cat.best_iteration_
-
-
 # ## SUBMISSION
 
-# ### Last check
+# ### Write submission file
 
 # In[ ]:
 
 
 final_estimator = cat
+final_pred = final_estimator.predict_proba(test)[:, 1]
 
-X_train, X_valid, y_train, y_valid = train_test_split(train, target, 
-                                                      train_set=0.9)
-
-
-final_estimator.fit(X_train, y_train)
-_roc_auc = roc_auc_score(y_valid, 
-                         final_estimator.predict_proba(X_valid)[:, 1])
-
-print(f'ROC-AUC: {_roc_auc:.5f}')
-# ### Train on the full dataset
-
-# In[56]:
-
-
-get_ipython().run_cell_magic('time', '', 'pool = Pool(train, target, cat_features=cat_features_idx)\nfinal_estimator.fit(train_pool, use_best_model=True, eval_set=eval_pool,\n                    plot=True, save_snapshot=True,\n                    snapshot_interval=60)\nfinal_pred = final_estimator.predict_proba(X_test)[: 1]')
-
-
-# ### Write submission file
 
 # In[63]:
 
@@ -448,18 +419,4 @@ write_to_submission_file(final_pred, f'../submissions/catboost_submission_at_{no
 pd.Series(final_pred, 
           name='dep_delayed_15min').to_csv('xgb_2feat.csv', 
                                            index_label='id', header=True)
-
-
-# In[58]:
-
-
-pd.Series(final_pred, 
-          name='dep_delayed_15min').to_csv('xgb_2feat.csv', 
-                                           index_label='id', header=True)
-
-
-# In[2]:
-
-
-pd.read_csv('../submissions/catboost_submission_at_2018-12-13_00-13-17__githash_2a09165.csv')
 

@@ -620,12 +620,6 @@ def write_to_submission_file(predicted_labels, out_file,
 get_ipython().system('git describe --always')
 
 
-# In[174]:
-
-
-subprocess.check_output(["git", "describe", "--always"]).strip().decode("utf-8")
-
-
 # In[172]:
 
 
