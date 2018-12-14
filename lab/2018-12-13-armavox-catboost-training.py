@@ -205,7 +205,7 @@ get_ipython().run_cell_magic('time', '', "features = {'X_month_train': X_month_t
 
 # ### CONCATENATE DATA
 
-# In[58]:
+# In[13]:
 
 
 y = target.dep_delayed_15min.values
@@ -274,28 +274,28 @@ roc_auc_score(y_valid, rf.predict_proba(X_valid)[:,1])
 
 # ### Simple CatBoost
 
-# In[45]:
+# In[7]:
 
 
 from catboost import CatBoostClassifier, Pool
 from catboost import cv
 
 
-# In[30]:
+# In[8]:
 
 
 cat_features_idx = np.where((train.dtypes == 'object') | (train.dtypes == 'int64'))[0].tolist()
 cat_features_idx
 
 
-# In[31]:
+# In[9]:
 
 
 X_train, X_valid, y_train, y_valid = train_test_split(
         train, target, train_size=0.7, random_state=42)
 
 
-# In[27]:
+# In[10]:
 
 
 cat = CatBoostClassifier(random_state=42, thread_count=72)
@@ -321,11 +321,11 @@ get_ipython().run_cell_magic('time', '', "pool = Pool(train, target, cat_feature
 
 # ### Catboost search
 
-# In[65]:
+# In[49]:
 
 
 X_train, X_valid, y_train, y_valid = train_test_split(
-        train, target, train_size=0.9, random_state=42)
+        train, target, train_size=0.95, random_state=42)
 train_pool = Pool(X_train, y_train, cat_features=cat_features_idx)
 eval_pool = Pool(X_valid, y_valid, cat_features=cat_features_idx)
 
@@ -340,20 +340,19 @@ cat_search_params = {
     }
 
 
-# In[93]:
+# In[57]:
 
 
 cat_params = {
-    'iterations' : 2000,
-    'learning_rate' : 0.03,
-    'depth' : 12,
-    'l2_leaf_reg' : 3,
+    'iterations' : 1200,
+    'learning_rate' : 0.05,
+    'depth' : 10,
+    'l2_leaf_reg' : 10,
     'loss_function' : 'Logloss',
     'border_count' : 254,
     'od_type': 'IncToDec',
     'od_pval' : 1e-5,
 #     'early_stopping_rounds' : 10,
-    'thread_count' : 8,
     'random_seed' : 42,
     'use_best_model' : True,
     'verbose': False,
@@ -362,17 +361,21 @@ cat_params = {
     'custom_metric' : 'AUC',
     'eval_metric' : 'AUC',
     'boosting_type' : 'Ordered',
+#     'bagging_temperature' : 3,
 #     'subsample' : 0.66,
-    'cat_features' : cat_features_idx    
+    'cat_features' : cat_features_idx ,
+    'save_snapshot': True,
+    'snapshot_file': 'depth_16'
 }
 
 cat = CatBoostClassifier(**cat_params)
 
 
-# In[94]:
+# In[ ]:
 
 
-cat.fit(train_pool, use_best_model=True, eval_set=eval_pool, plot=True)
+cat.fit(train_pool, use_best_model=True, eval_set=eval_pool, plot=True,
+       save_snapshot=True, snapshot_file='finalfinal', snapshot_interval=60)
 
 
 # In[ ]:
@@ -382,7 +385,7 @@ roc_auc_score(y_valid,
               cat.predict_proba(X_valid)[:, 1])
 
 
-# In[86]:
+# In[ ]:
 
 
 cat.best_iteration_
@@ -397,10 +400,6 @@ cat.best_iteration_
 
 final_estimator = cat
 
-
-# In[ ]:
-
-
 X_train, X_valid, y_train, y_valid = train_test_split(train, target, 
                                                       train_set=0.9)
 
@@ -410,14 +409,12 @@ _roc_auc = roc_auc_score(y_valid,
                          final_estimator.predict_proba(X_valid)[:, 1])
 
 print(f'ROC-AUC: {_roc_auc:.5f}')
-
-
 # ### Train on the full dataset
 
-# In[ ]:
+# In[56]:
 
 
-get_ipython().run_cell_magic('time', '', 'pool = Pool(train, target, cat_features=cat_features_idx)\nfinal_estimator.fit(pool)\nfinal_pred = final_estimator.predict_proba(X_test)[: 1]')
+get_ipython().run_cell_magic('time', '', 'pool = Pool(train, target, cat_features=cat_features_idx)\nfinal_estimator.fit(train_pool, use_best_model=True, eval_set=eval_pool,\n                    plot=True, save_snapshot=True,\n                    snapshot_interval=60)\nfinal_pred = final_estimator.predict_proba(X_test)[: 1]')
 
 
 # ### Write submission file
