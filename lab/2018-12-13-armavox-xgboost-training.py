@@ -8,7 +8,7 @@
 
 # ### Perform dataset preparing
 
-# In[2]:
+# In[25]:
 
 
 get_ipython().run_cell_magic('capture', 'output  ', '# pip install nbformat\n# execute `output.show()` to show output figures and text (if they are)\n%run ./2018-12-12-armavox-prepare-dataset.ipynb')
@@ -25,6 +25,8 @@ get_ipython().run_cell_magic('capture', 'output  ', '# pip install nbformat\n# e
 get_ipython().run_line_magic('load_ext', 'watermark')
 get_ipython().run_line_magic('watermark', '-v -m -r -b -g -p numpy,pandas,sklearn,matplotlib,statsmodels,xgboost,catboost')
 
+
+# __Required modules__
 
 # In[2]:
 
@@ -171,7 +173,7 @@ X_route_test = ohe.fit_transform(test.Route.values.reshape(-1, 1))
 
 # ### SELECT FEATURES
 
-# In[ ]:
+# In[19]:
 
 
 def simple_xgb_cv(X, y, n_estimators=27, max_depth=5, seed=42,
@@ -202,7 +204,7 @@ get_ipython().run_cell_magic('time', '', "features = {'X_month_train': X_month_t
 
 # ### CONCATENATE DATA
 
-# In[ ]:
+# In[20]:
 
 
 y = target.dep_delayed_15min.values
@@ -212,7 +214,7 @@ print("positive objects:", y.sum())
 balance_coef = np.sum(y==0) /  np.sum(y==1)
 
 
-# In[ ]:
+# In[22]:
 
 
 # Best feature combination
@@ -225,7 +227,7 @@ X = np.hstack([
     X_minute_train,
     X_isweekend_train,
     X_carrier_train,
-#     X_origin_train
+    X_origin_train,
     X_dest_train,
 #     X_route_train
 ])
@@ -238,7 +240,7 @@ X_test = np.hstack([
     X_minute_test,
     X_isweekend_test,
     X_carrier_test,
-#     X_origin_test,
+    X_origin_test,
     X_dest_test,
 #     X_route_test
 ])
@@ -250,47 +252,88 @@ X.shape, X_test.shape, y.shape
 
 # ### Simple XGBoost
 
-# In[96]:
+# In[30]:
 
 
 X_train, X_valid, y_train, y_valid = train_test_split(
-        X, y, train_size=0.9, random_state=42)
+    X, y, train_size=0.7, random_state=42
+)
 skf = StratifiedKFold(n_splits=5, random_state=42)
 
 
-# In[ ]:
+# In[31]:
 
 
-xgb = XGBClassifier(n_estimators=300, max_depth=3, random_state=42, n_jobs=-1)
+xgb = XGBClassifier(n_estimators=30, max_depth=3, random_state=42, n_jobs=-1)
 
 
-# In[ ]:
+# In[32]:
 
 
-get_ipython().run_cell_magic('capture', 'In24', '%%time\nxgb.fit(X_train, y_train)\nprint(roc_auc_score(y_valid, xgb.predict_proba(X_valid)[:, 1]))')
+get_ipython().run_cell_magic('time', '', 'xgb.fit(X_train, y_train)\nprint(roc_auc_score(y_valid, xgb.predict_proba(X_valid)[:, 1]))')
 
 
-# In[ ]:
+# In[34]:
 
 
-get_ipython().run_cell_magic('capture', 'In25', "_cv_score = cross_val_score(xgb, X, y, scoring='roc_auc', cv=skf, n_jobs=-1)\n_cv_score.mean(), _cv_score.std()")
+get_ipython().run_cell_magic('time', '', "_cv_score = cross_val_score(xgb, X, y, scoring='roc_auc', cv=skf, n_jobs=-1)\nprint(_cv_score.mean(), _cv_score.std())")
 
 
-# In[29]:
+# ### XGB hyperopt
+
+# In[65]:
 
 
-In25.show()
-
-
-# ### XGB CV
-
-# In[ ]:
-
-
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from hyperopt import hp
+from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
+import xgboost as xgb
 
 
 # #### Iteration #1. Model complexity
+
+# In[62]:
+
+
+def score(params):
+    print("Training with params:")
+    print(params)
+    dtrain = xgb.DMatrix(X_train, y_train)
+    dvalid = xgb.DMatrix(X_valid)
+    params['max_depth'] = int(params['max_depth'])
+    model = xgb.train(params, dtrain, params['num_round'])
+    predictions = model.predict(dvalid).reshape(-1, 1)
+    score = 1 - roc_auc_score(y_valid, predictions)
+    print(f"\tScore {score}\n\n")
+    return {'loss': score, 'status': STATUS_OK}
+
+
+# In[67]:
+
+
+def optimize(trials):
+    space = {
+             'num_round': 30,
+             'learning_rate': 0.05,
+             'max_depth': hp.quniform('max_depth', 3, 14, 1),
+             'min_child_weight': hp.quniform('min_child_weight', 1, 10, 1),
+             'subsample': hp.quniform('subsample', 0.5, 1, 0.05),
+             'gamma': hp.quniform('gamma', 0.5, 1, 0.01),
+             'colsample_bytree': hp.quniform('colsample_bytree', 0.4, 1, 0.05),
+             'eval_metric': 'auc',
+             'objective': 'binary:logistic',
+             'nthread' : 8,
+             'silent' : 1
+             }
+    
+    best = fmin(score, space, algo=tpe.suggest, trials=trials, max_evals=10)
+    return best
+
+
+# In[68]:
+
+
+get_ipython().run_cell_magic('time', '', 'trials = Trials()\nbest_params = optimize(trials)\nbest_params')
+
 
 # In[33]:
 
@@ -322,24 +365,6 @@ get_ipython().run_cell_magic('capture', 'In29', 'xgbest1 = xgb_search1.best_esti
 
 
 get_ipython().run_cell_magic('capture', 'In30', 'print(f"""ROC-AUC on the validation data: \n{roc_auc_score(y_valid, xgbest1.predict_proba(X_valid)[:, 1]):.5f}""")')
-
-
-# In[45]:
-
-
-In29.show()
-
-
-# In[44]:
-
-
-In30.show()
-
-
-# In[49]:
-
-
-import xgboost as xgb
 
 
 # #### Iteration #2. Model optimization
