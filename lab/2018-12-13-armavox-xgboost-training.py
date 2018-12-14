@@ -250,11 +250,11 @@ X.shape, X_test.shape, y.shape
 
 # ### Simple XGBoost
 
-# In[ ]:
+# In[96]:
 
 
 X_train, X_valid, y_train, y_valid = train_test_split(
-        X, y, train_size=0.7, random_state=42)
+        X, y, train_size=0.9, random_state=42)
 skf = StratifiedKFold(n_splits=5, random_state=42)
 
 
@@ -324,14 +324,196 @@ get_ipython().run_cell_magic('capture', 'In29', 'xgbest1 = xgb_search1.best_esti
 get_ipython().run_cell_magic('capture', 'In30', 'print(f"""ROC-AUC on the validation data: \n{roc_auc_score(y_valid, xgbest1.predict_proba(X_valid)[:, 1]):.5f}""")')
 
 
+# In[45]:
+
+
+In29.show()
+
+
+# In[44]:
+
+
+In30.show()
+
+
+# In[49]:
+
+
+import xgboost as xgb
+
+
 # #### Iteration #2. Model optimization
+
+# In[50]:
+
+
+dtrain = xgb.DMatrix(X, y)
+
+
+# In[81]:
+
+
+best_params = xgb_best_complexity
+best_params['objective'] = 'binary:logistic'
+best_params['nthread'] = 16
+# best_params['silent'] = 1
+best_params['eval_metric'] = 'auc'
+best_params['eta'] = 0.05
+best_params
+
+
+# In[75]:
+
+
+get_ipython().run_cell_magic('time', '', "xgb_cv = xgb.cv(best_params, dtrain, num_boost_round=500, metrics='auc',\n                stratified=True, nfold=5, early_stopping_rounds=50, \n                verbose_eval=True, seed=42)")
+
+
+# In[77]:
+
+
+plt.plot(range(xgb_cv.shape[0]), xgb_cv['test-auc-mean'], label='test')
+plt.plot(range(xgb_cv.shape[0]), xgb_cv['train-auc-mean'], label='train')
+plt.legend();
+
+
+# In[ ]:
+
+
+best_num_round = np.argmin(xgb_cv['test-auc-mean'])
+
+
+# #### hyperopt optimization
+
+# In[112]:
+
+
+from hyperopt import hp
+from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
+
+
+# In[128]:
+
+
+X_train, X_valid, y_train, y_valid = train_test_split(
+        X, y, train_size=0.7, random_state=42)
+X_train.shape, X_valid.shape, y_train.shape, y_valid.shape
+
+
+# In[150]:
+
+
+def score(params):
+    print("Training with params:")
+    print(params)
+    dtrain = xgb.DMatrix(X_train, y_train)
+    dvalid = xgb.DMatrix(X_valid)
+    params['max_depth'] = int(params['max_depth'])
+    model = xgb.train(params, dtrain, params['num_round'])
+    predictions = model.predict(dvalid).reshape(-1, 1)
+    score = 1 - roc_auc_score(y_valid, predictions)
+    print("\tScore {0}\n\n".format(score))
+    return {'loss': score, 'status': STATUS_OK}
+
+
+# In[151]:
+
+
+def optimize(trials):
+    space = {
+             'num_round': 30,
+             'learning_rate': 0.05,
+             'max_depth': hp.quniform('max_depth', 3, 14, 1),
+             'min_child_weight': hp.quniform('min_child_weight', 1, 10, 1),
+             'subsample': hp.quniform('subsample', 0.5, 1, 0.05),
+             'gamma': hp.quniform('gamma', 0.5, 1, 0.01),
+             'colsample_bytree': hp.quniform('colsample_bytree', 0.4, 1, 0.05),
+             'eval_metric': 'auc',
+             'objective': 'binary:logistic',
+             'nthread' : 8,
+             'silent' : 1
+             }
+    
+    best = fmin(score, space, algo=tpe.suggest, trials=trials, max_evals=10)
+    return best
+
+
+# In[152]:
+
+
+trials = Trials()
+best_params = optimize(trials)
+best_params
+
+
+# In[158]:
+
+
+best_params['max_depth'] = int(best_params['max_depth'])
+best_params['eta']= 0.05
+best_params['eval_metric']= 'auc'
+best_params['objective']= 'binary:logistic'
+best_params['nthread'] = 8
+best_params['silent'] = 1
+best_params
+
+
+# In[159]:
+
+
+get_ipython().run_cell_magic('time', '', "xgb_cv = xgb.cv(best_params, dtrain, num_boost_round=500, metrics='auc',\n                stratified=True, nfold=5, early_stopping_rounds=50, \n                verbose_eval=True, seed=42)")
+
+
+# In[160]:
+
+
+plt.plot(range(xgb_cv.shape[0]), xgb_cv['test-auc-mean'], label='test')
+plt.plot(range(xgb_cv.shape[0]), xgb_cv['train-auc-mean'], label='train')
+plt.legend();
+
+
+# In[162]:
+
+
+best_num_round = np.argmax(xgb_cv['test-auc-mean'])
+best_num_round
+
+
+# In[163]:
+
+
+X_train, X_valid, y_train, y_valid = train_test_split(
+        X, y, train_size=0.9, random_state=42)
+X_train.shape, X_valid.shape, y_train.shape, y_valid.shape
+
+
+# In[164]:
+
+
+dtrain = xgb.DMatrix(X_train, y_train)
+dvalid = xgb.DMatrix(X_valid)
+dfull = xgb.DMatrix(X, y)
+dtest = xgb.DMatrix(X_test)
+
+
+# In[165]:
+
+
+get_ipython().run_cell_magic('time', '', 'bestXgb = xgb.train(best_params, dtrain, num_boost_round=best_num_round)\nprint(roc_auc_score(y_valid, bestXgb.predict(dvalid).reshape(-1,1)))')
+
+
+# In[ ]:
+
+
+fullXGB = xgb.train(best_params, dfull, num_boost_round=best_num_round)
+final_pred = fullXGB.predict(dtest)
+
 
 # In[ ]:
 
 
 _xgb_grid_params_iteration2 = {
     'n_estimators': np.linspace(100, 1000, 10, dtype='int'),
-    'learning_rate': np.arange(0.005, 0.1, 0.005)
+#     'learning_rate': np.arange(0.005, 0.1, 0.005)
 }
 
 
@@ -339,6 +521,12 @@ _xgb_grid_params_iteration2 = {
 
 
 get_ipython().run_cell_magic('capture', 'In32', "%%time\n\nxgb_search2 = GridSearchCV(xgbest1, _xgb_grid_params_iteration2,\n                                cv=skf, scoring='roc_auc', \n                                n_jobs=-1, verbose=1)\nxgb_search2.fit(X_train, y_train)")
+
+
+# In[46]:
+
+
+In32.show()
 
 
 # In[ ]:
