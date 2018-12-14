@@ -501,7 +501,7 @@ dtest = xgb.DMatrix(X_test)
 get_ipython().run_cell_magic('time', '', 'bestXgb = xgb.train(best_params, dtrain, num_boost_round=best_num_round)\nprint(roc_auc_score(y_valid, bestXgb.predict(dvalid).reshape(-1,1)))')
 
 
-# In[ ]:
+# In[166]:
 
 
 fullXGB = xgb.train(best_params, dfull, num_boost_round=best_num_round)
@@ -574,7 +574,7 @@ get_ipython().run_cell_magic('capture', 'In38', '%%time\nfinal_estimator.fit(X, 
 
 # ### Write submission
 
-# In[ ]:
+# In[169]:
 
 
 # Function for writing predictions to a file
@@ -589,7 +589,19 @@ def write_to_submission_file(predicted_labels, out_file,
     predicted_df.to_csv(out_file, index_label=index_label)
 
 
-# In[ ]:
+# In[175]:
+
+
+get_ipython().system('git describe --always')
+
+
+# In[174]:
+
+
+subprocess.check_output(["git", "describe", "--always"]).strip().decode("utf-8")
+
+
+# In[172]:
 
 
 from datetime import datetime as dt
@@ -598,5 +610,5 @@ now = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
 label = subprocess.check_output(["git", "describe", "--always"]).strip().decode("utf-8")
 
 ### WRITE SUBMISSION
-write_to_submission_file(final_pred, f'../submissions/xgb_submission_at_{now}__githash_{label}.csv')
+# write_to_submission_file(final_pred, f'../submissions/xgb_submission_at_{now}__githash_{label}.csv')
 
